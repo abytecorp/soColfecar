@@ -1,0 +1,46 @@
+
+// Fonts
+//@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+// @import '~bootstrap/scss/bootstrap';
+
+//primal style
+@import '../dist/css/style.min.css';
+
+//login2
+@import '../dist/css/pages/login-register-lock';
+
+//morris
+@import '../assets/node_modules/morrisjs/morris.css';
+@import '../../../node_modules/toastr/toastr.scss';
+
+
+
+//Pages
+@import '../dist/css/pages/dashboard1.css';
+
+
+
+//select 2
+@import '../assets/node_modules/bootstrap-datepicker/bootstrap-datepicker.min.css';
+@import '../assets/node_modules/select2/dist/css/select2.min.css';
+@import '../assets/node_modules/switchery/dist/switchery.min.css';
+@import '../assets/node_modules/bootstrap-select/bootstrap-select.min.css';
+@import '../assets/node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css';
+@import '../assets/node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css';
+@import '../dist/css/pages/user-card.css';
+@import '../dist/css/pages/ribbon-page.css';
+@import '../dist/css/pages/tab-page.css';
+
+
+
+
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
