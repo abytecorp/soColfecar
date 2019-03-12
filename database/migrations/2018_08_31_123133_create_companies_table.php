@@ -18,6 +18,7 @@ class CreateCompaniesTable extends Migration
             $table->string('bs_name');
             $table->string('acronym')->nullable();
             $table->string('nit')->unique()->nullable();
+            $table->integer('verification_digit')->nullable();
             $table->integer('id_company_type')->unsigned()->nullable();
             $table->string('web')->nullable();
             $table->string('email')->unique();

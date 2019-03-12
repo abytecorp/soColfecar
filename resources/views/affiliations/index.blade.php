@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 @section('css')
-    @include('layouts.cssAff')
+    {{-- @include('layouts.cssAff') --}}
 @endsection
 
 <div class="page-wrapper">

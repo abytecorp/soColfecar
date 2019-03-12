@@ -68,7 +68,8 @@ Vue.component('external-insc', require('./components/External-Inscription.vue'))
 Vue.component('trade-union-argumentation', require('./components/Trade-union-argumentation.vue').default);
 
 
-Vue.component('dashboard-af', require('./components/Dashboard-af.vue'));
+
+Vue.component('dashboard-af', require('./components/Dashboard-af.vue').default);
 
 
 const app = new Vue({

@@ -60,7 +60,7 @@
             <div class="card-body">
                             <h4 class="card-title">Foto de perfil</h4>
                             <label for="input-file-now-custom-1">Seleccione un archivo en formato .JPG</label>
-                            <input type="file" id="input-file-now-custom-1" class="dropify" data-default-file="../assets/node_modules/dropify/src/images/test-image-1.jpg" />
+                            <input type="file" id="avtr" class="dropify" data-default-file="../assets/node_modules/dropify/src/images/test-image-1.jpg" />
             </div>
         </div>
                 {{-- </div> --}}

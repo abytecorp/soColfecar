@@ -145,4 +145,26 @@ class AffiliationsController extends Controller
         //dd($companies);
         return response()->json($companies);
     }
+    public function getCompaniesApi()
+    {
+        $companies = Company::all();
+        return $companies;
+    }
+    public function getCompaniesByState($request)
+    {
+        $companies = Company::where('id_cmp_state',$request)
+            ->get();
+        return $companies;
+    }
+    public function getCompanyById($request)
+    {
+        $company = Company::select('companies.id AS company_id','companies.bs_name','companies.acronym','companies.nit','companies.verification_digit',
+            'companies.id_company_type','companies.web','companies.email','companies.address','companies.logo','companies.phone1',
+            'companies.phone2','companies.phone3','companies.id_cmp_state','companies.id_status','companies.id_city','cities.city',
+            'cities.id AS city_id')
+            ->where('companies.id',$request)
+            ->join('cities','companies.id_city','cities.id')
+            ->first();
+        return $company;
+    }
 }

@@ -66,8 +66,15 @@ Route::middleware(['auth'])->group(function(){
         Route::get('affiliations/estados', 'AffiliationsController@obestados')->name('estados-empresas.get');
         Route::get('affiliations/changes/{module}/', 'AffiliationsController@getChanges')->name('affiliations-changes.get');
         Route::get('affiliations/company/{id_cmp_state}', 'AffiliationsController@getCompanies')->name('affiliations-getCompanies');
+        Route::get('affiliations/get-companies', 'AffiliationsController@getCompaniesApi');
+        Route::get('affiliations/companies-by-state/{state_company}', 'AffiliationsController@getCompaniesByState');
 
 //API
+        //get assets to normally address
+        Route::get('/api/address/get-nomenclatures','AddressController@getNomenclatures');
+        Route::get('/api/address/get-digits','AddressController@getDigits');
+        Route::get('/api/address/get-add-letters','AddressController@getAddLetters');
+
         //update print gafete status
         Route::put('update-record-print/{record}', 'RecordController@update')->name('records.update')
                 ->middleware('permission_sh:records.edit');
@@ -211,6 +218,8 @@ Route::middleware(['auth'])->group(function(){
 
         //get chapter types
         Route::get('/api/get-chapter-types','ChapterController@getChapterTypes');
+
+        Route::get('/api/company/{company}/get-company','AffiliationsController@getCompanyById');
 
     //Chapters
     Route::post('chapter/store', 'ChapterController@store')->name('chapter.store');
