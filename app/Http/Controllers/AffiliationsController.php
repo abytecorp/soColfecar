@@ -4,12 +4,14 @@ namespace soColfecar\Http\Controllers;
 
 use Illuminate\Http\Request;
 use soColfecar\Http\Requests\CreateCompanyRequest;
+use soColfecar\Http\Requests\UpdateCompanyRequest;
 use Caffeinated\Shinobi\Models\Role;
 use soColfecar\Company_state;
 use soColfecar\Company_type;
 use soColfecar\Change;
 use soColfecar\Company;
 use soColfecar\Event_type;
+use soColfecar\Item;
 use Auth;
 
 class AffiliationsController extends Controller
@@ -25,7 +27,8 @@ class AffiliationsController extends Controller
         $companies = Company::all();
         $changes = Change::orderBy('created_at','DESC')->paginate(6);
         $title= 'Afiliaciones';
-        return view('affiliations.index',compact('company_states','title','changes','companies'));
+        $item_id= Item::where('item',$title)->first();
+        return view('affiliations.index',compact('company_states','title','changes','companies','item_id'));
     }
 
     /**
@@ -50,7 +53,7 @@ class AffiliationsController extends Controller
     {
         $title = 'Empresas ';
         $logo = $request->file('logo');
-        $company =Company::create([
+        $company = Company::create([
             'bs_name' => $request['bs_name'],
             'acronym' => $request['acronym'],
             'nit' => $request['nit'],
@@ -99,9 +102,35 @@ class AffiliationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCompanyRequest $request, $id)
     {
-        //
+        $company = Company::where('id',$id)->first();
+        if($request['logoChanged']){
+            $exploded = explode(',', $request->logo);
+                    $decoded = base64_decode($exploded[1]);
+            if(str_contains($exploded[0],'jpeg'))
+                $extension = 'jpg';
+            else
+                $extension = 'png';
+            $fileName = str_random().'.'.$extension;
+            $path = public_path().'/storage/logos/'.$fileName;
+            file_put_contents($path, $decoded);
+            $logo = $request->file['logo'];
+            $request['logo'] = $fileName;
+            }else{
+                $request['logo'] = '';
+            }
+            $request['bs_name'] = strtoupper($request['bs_name']);
+            $request['acronym'] = strtoupper($request['acronym']);
+            $company->update(
+                $request->all()
+            );
+            Change::create([
+                'description' => 'Actualizo datos la empresa :'.$request['bs:_name'].' correctamente.',
+                'id_user' => Auth::user()->id,
+                'id_item' => 7
+            ]);
+            return;
     }
 
     /**

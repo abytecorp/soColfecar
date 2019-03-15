@@ -142,4 +142,9 @@ class UserController extends Controller
         //     }
         // }
     }
+    public function getUsers()
+    {
+        $users = User::where('id_status',1)->get();
+        return $users;
+    }
 }

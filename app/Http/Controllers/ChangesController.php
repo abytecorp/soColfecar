@@ -31,4 +31,9 @@ class ChangesController extends Controller
                             ->get();
         return $changes;
     }
+    public function getChangesByMonth($currentDate,$initDate)
+    {
+        $changes = Change::whereBetween('created_at', [$initDate,$currentDate])->get();
+        return $changes;
+    }
 }

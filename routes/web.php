@@ -218,8 +218,12 @@ Route::middleware(['auth'])->group(function(){
 
         //get chapter types
         Route::get('/api/get-chapter-types','ChapterController@getChapterTypes');
-
+        //get the company by id to module
         Route::get('/api/company/{company}/get-company','AffiliationsController@getCompanyById');
+        //get all users that is active
+        Route::get('/api/get-users/','UserController@getUsers');
+        //get the changes by month
+        Route::any('/api/get-changes-by-month/{currentDate}/{initDate}','ChangesController@getChangesByMonth');
 
     //Chapters
     Route::post('chapter/store', 'ChapterController@store')->name('chapter.store');

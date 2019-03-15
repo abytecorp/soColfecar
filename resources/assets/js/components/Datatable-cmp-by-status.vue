@@ -21,7 +21,7 @@
       <el-table-column v-for="title in titles" :prop="title.prop" :label="title.label" :key="title.prop" sortable="custom">
       </el-table-column>
     </data-tables>
-
+<hr>
 
 
 <!-- modal update chapter -->
@@ -33,13 +33,13 @@
                     <button type="button" class="close" v-on:click="claenVariablesUpdate">×</button>
                 </div>
                 <div class="modal-body">
-                  <form v-on:submit.prevent="updateCompanySet(companyUpdate.chapter_id)">
-                    <div v-if="companyUpdate.logo != null && imageData == null">
+                  <form v-on:submit.prevent="updateCompanySet(companyUpdate.company_id)">
+                    <div v-if="companyUpdate.logo != '' && imageData == null">
                       <button type="button" class="btn btn-danger" v-on:click="deleteLogo"><i class="fa fa-trash-o"></i> Eliminar</button>
                       <img class="card-img-top img-fluid" :src="'storage/logos/'+companyUpdate.logo" alt="Card image cap">
                     </div>
-                    <div v-else-if="companyUpdate.banner != null && imageData != null">
-                      <button type="button" class="btn btn-danger" v-on:click="deleteBanner"><i class="fa fa-trash-o"></i> Eliminar</button>
+                    <div v-else-if="companyUpdate.logo != '' && imageData != null">
+                      <button type="button" class="btn btn-danger" v-on:click="deleteLogo"><i class="fa fa-trash-o"></i> Eliminar</button>
                       <img class="card-img-top img-fluid" :src="imageData" alt="Card image cap">
                     </div>
                     <div v-else>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="form-group m-form__group">
                       <label for="bsNameInput">Razon Social:</label>
-                      <input type="text" class="form-control m-input m-input--air" id="bsNameInput" aria-describedby="bsNameInputHelp" placeholder="Escriba el nombre o razon social de la empresa" v-model="companyUpdate.bs_name">
+                      <input type="text" class="form-control m-input m-input--air" id="bsNameInput" placeholder="Escriba el nombre o razon social de la empresa" v-model="companyUpdate.bs_name">
                       <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.bs_name }}</span>
                     </div>
                     <div class="form-group m-form__group">
@@ -63,11 +63,15 @@
                       <input type="text" class="form-control m-input m-input--air" id="acronymInput" aria-describedby="acronymInputHelp" placeholder="Escriba el nombre corto o SIGLAS de la empresa" v-model="companyUpdate.acronym">
                       <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.acronym }}</span>
                     </div>
+
                     <div class="form-group m-form__group">
-                      <label for="bsNameInput">NIT:</label>
-                      <input type="number" class="form-control m-input m-input--air" id="nitInput" aria-describedby="nitInputHelp"  v-model="companyUpdate.bs_name">
-                      <input type="number" class="form-control m-input m-input--air" id="verificationDigitInput" aria-describedby="verificationDigitInputHelp" v-model="companyUpdate.verification_digit">
-                        <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.nit }}</span>
+                        <label for="bsNameInput">NIT:</label>
+                      <div class="input-group mb-3">
+                          <input type="number" class="form-control m-input m-input--air" id="nitInput" aria-describedby="nitInputHelp"  v-model="companyUpdate.nit">
+                          <p>     Digito de verificacion (-) </p>
+                          <input type="text" class="form-control"  aria-label="Username" aria-describedby="basic-addon1"  v-model="companyUpdate.verification_digit">
+                      </div>
+                      <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.nit }}</span>
                     </div>
                     <div class="form-group m-form__group">
                       <label for="bsNameInput">Pagina Web:</label>
@@ -107,12 +111,12 @@
                     </div>
                     <div class="form-group m-form__group">
                       <label for="bsNameInput">Ciudad:</label>
-                      <v-select :options="cities"  v-model="companyUpdate.city"  label="city">
+                      <v-select :options="cities"  v-model="companyUpdate.city" @change="delVar" label="city">
                           <template slot="option" slot-scope="option">
                               {{ option.city }}
                           </template>
                       </v-select>
-                      <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.web }}</span>
+                      <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.id_city }}</span>
                     </div>
                     <hr>
                    
@@ -164,13 +168,13 @@ export default {
         acronym:              '',
         address:              '',
         afiliation_state_id:  '',
-        bs_name:              false,
+        bs_name:              '',
         created_at:           '',
         email:                '',
         id_city:              null,
         id_cmp_state:         null,
         id_status:            null,
-        logo:                 null,
+        logo:                 '',
         nit:                  '',
         phone1:               '',
         phone2:               '',
@@ -178,7 +182,7 @@ export default {
         web:                  '',
       },
       imageData:          null,//preview form image
-      bannerChanged:      false,
+      logoChanged:      false,
       cities:  [],
       errors: [],
       titles: [{prop:'bs_name',label:'Razon Social',key:'bs_name'},{prop:'email',label:'Em@il',key:'email'},{prop:'nit',label:'NIT',key:'nit'}],
@@ -219,7 +223,7 @@ export default {
       var fileReader = new FileReader()
       fileReader.readAsDataURL(e.target.files[0])
       fileReader.onload = (e) => {
-      this.chapter.banner = e.target.result
+      this.companyUpdate.logo = e.target.result
       }
     },
     handleSelectionChange : function () {
@@ -229,9 +233,9 @@ export default {
       var fileReader = new FileReader()
       fileReader.readAsDataURL(e.target.files[0])
       fileReader.onload = (e) => {
-      this.companyUpdate.banner = e.target.result
+      this.companyUpdate.logo = e.target.result
       }
-      this.bannerChanged = true
+      this.logoChanged = true
     },
     getCities() {
       let url = '/api/get-cities';
@@ -251,14 +255,16 @@ export default {
         let url = '/api/company/'+ id +'/get-company';
         axios.get(url).then(response =>{
             this.companyUpdate = response.data
+            //this.companyUpdate.id_city = this.companyUpdate.city_id
+
         }).catch(error => {
             this.errors = error.response.data
         });
     },
     deleteLogo : function() {
-      this.companyUpdate.logo = null
+      this.companyUpdate.logo = ''
       this.imageData = null
-      //this.chapter.banner = null
+      this.logoChanged = false
     },
     previewImage: function(event) {
             // Reference to the DOM input element
@@ -278,28 +284,40 @@ export default {
             }
         this.getLogoUpdate(event)
     },
-    updateChapterSet : function(id) {
-      this.companyUpdate.is_billing = this.companyUpdate.is_billing == true ? 1 : 0
-      this.companyUpdate.bannerChanged = this.bannerChanged
-      let url = 'chapter/'+id
+    updateCompanySet : function(id) {
+      //this.companyUpdate.is_billing = this.companyUpdate.is_billing == true ? 1 : 0
+      this.companyUpdate.logoChanged = this.logoChanged
+      this.companyUpdate.id_city = typeof(this.companyUpdate.city) == "object" ? this.companyUpdate.city.id : this.companyUpdate.city_id 
+      //console.log(typeof this.companyUpdate.city)
+      let url = 'affiliations/'+id
       axios.put(url, this.companyUpdate).then(response =>{
-            this.companyUpdate.id_status =       '',
-            this.companyUpdate.user_id =         '',
-            this.companyUpdate.chapter_id =      '',
-            this.companyUpdate.chapter =         '',
-            this.companyUpdate.description=      '',
-            this.companyUpdate.id_chapter_type=  '',
-            this.companyUpdate.chapter_type=     ''
-            this.companyUpdate.created_at=       ''
-            this.companyUpdate.is_billing=       false,
-            this.companyUpdate.date_init=        '',
-            this.companyUpdate.date_end=         '',
-            this.companyUpdate.banner=           null,
-            this.imageData=                      null,
-            this.companyUpdate.bannerChanged =   false,
-            this.bannerChanged =                 false,
-            this.$emit('updateDataTable')
-            $('#modalUpdateChapter').modal('hide')
+        this.$emit('updateDataTable',this.companyUpdate.id_cmp_state)
+        this.companyUpdate.acronym=              '',
+        this.companyUpdate.address=              '',
+        this.companyUpdate.afiliation_state_id=  '',
+        this.companyUpdate.bs_name=              '',
+        this.companyUpdate.verification_digit=   '',
+        this.companyUpdate.city=                 '',
+        this.companyUpdate.city_id=              '',
+        this.companyUpdate.company_id=           '',
+        this.companyUpdate.created_at=           '',
+        this.companyUpdate.email=                '',
+        this.companyUpdate.id_city=              null,
+        this.companyUpdate.id_cmp_state=         null,
+        this.companyUpdate.id_status=            null,
+        this.companyUpdate.logo=                 '',
+        this.companyUpdate.nit=                  '',
+        this.companyUpdate.phone1=               '',
+        this.companyUpdate.phone2=               '',
+        this.companyUpdate.phone3=               '',
+        this.companyUpdate.web=                  '',
+        this.imageData=                          null
+        this.logoChanged =                       false,
+          //this.companyUpdate.bannerChanged =   false,
+          //this.bannerChanged =                 false,
+        this.errors =                             [],
+          
+          $('#modalUpdateCompany').modal('hide')
       }).catch(error => {
         this.errors = error.response.data;
       });
@@ -319,14 +337,19 @@ export default {
       this.companyUpdate.banner=           null
       this.imageData=                      null
       this.companyUpdate.bannerChanged =   false
-      this.bannerChanged =                 false
+      this.logoChanged =                    false
+
       $('#modalUpdateChapter').modal('hide')
     },
     claenVariablesUpdate : function() {
         this.companyUpdate.acronym=              '',
         this.companyUpdate.address=              '',
         this.companyUpdate.afiliation_state_id=  '',
-        this.companyUpdate.bs_name=              false,
+        this.companyUpdate.bs_name=              '',
+        this.companyUpdate.verification_digit=   '',
+        this.companyUpdate.city=                 '',
+        this.companyUpdate.city_id=              '',
+        this.companyUpdate.company_id=           '',
         this.companyUpdate.created_at=           '',
         this.companyUpdate.email=                '',
         this.companyUpdate.id_city=              null,
@@ -338,7 +361,8 @@ export default {
         this.companyUpdate.phone2=               '',
         this.companyUpdate.phone3=               '',
         this.companyUpdate.web=                  '',
-        this.imageData=                          null
+        this.imageData=                          null,
+        this.logoChanged =                       false,
         $('#modalUpdateCompany').modal('hide')
     },
     showConf : function() {
@@ -358,6 +382,17 @@ export default {
     setReset : function() {
       //(Address-gen) this function reset or erase the charset or adress that gives the object
       this.companyUpdate.address = ''
+    },
+    delVar : function() {
+      if(this.companyUpdate.city == ''){
+        this.companyUpdate.id_city = ''
+        this.companyUpdate.city_id = ''
+        this.companyUpdate.bs_name=              ''
+        çthis.companyUpdate.verification_digit=   '',
+        this.companyUpdate.city=                 ''
+        this.companyUpdate.city_id=              ''
+        this.companyUpdate.company_id=           ''
+      }
     }
   }
 }

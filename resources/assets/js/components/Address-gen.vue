@@ -104,6 +104,7 @@ export default {
             });
         },
         setValueNom : function (val) {
+            this.clearInit()
             this.nom_named = val.nomenclature
             this.named = this.named == false ? true : false
             this.isEdit = false  
@@ -163,6 +164,12 @@ export default {
             let charFullDel = charFull.splice(pos,1)
             charFull = charFull.join(' ');
             this.$emit('upAddressDig',charFull)
+        },
+        clearInit : function () {
+            if(this.data == null){
+                console.log('cleared!')
+                this.reset()
+            }
         }
     }
 }
