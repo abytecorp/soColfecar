@@ -23,17 +23,33 @@ class ChangesController extends Controller
     }
     public function getChangesByItem($item)
     {
-        $changes = Change::select('changes.id','changes.description','changes.created_at','changes.id_user AS user_id','changes.id_item','users.name','users.last_name','users.avtr')
-                            ->join('users', 'users.id','=','changes.id_user')
-                            ->where('changes.id_item',$item)
-                            ->latest()
-                            ->take(10)
-                            ->get();
+        $changes = Change::select('changes.id','changes.description','changes.created_at','changes.id_user AS user_id',
+            'changes.id_item','users.name','users.last_name','users.avtr')
+                ->join('users', 'users.id','=','changes.id_user')
+                ->where('changes.id_item',$item)
+                ->latest()
+                ->take(10)
+                ->get();
         return $changes;
     }
-    public function getChangesByMonth($currentDate,$initDate)
+    public function getChangesByMonth($currentDate,$initDate,$item_id)
     {
-        $changes = Change::whereBetween('created_at', [$initDate,$currentDate])->get();
+        $changes = Change::select('changes.id','changes.description','changes.created_at','changes.id_user AS user_id',
+            'changes.id_item','users.name','users.last_name','users.avtr')
+            ->join('users', 'users.id','=','changes.id_user')
+            ->whereBetween('changes.created_at', [$initDate,$currentDate])
+            ->where('id_item',$item_id)->get();
+        return $changes;
+    }
+    public function getChangesByUser($user)
+    {
+        $changes = Change::select('changes.id','changes.description','changes.created_at','changes.id_user AS user_id',
+            'changes.id_item','users.name','users.last_name','users.avtr')
+                ->join('users', 'users.id','=','changes.id_user')
+                ->where('changes.id_user',$user)
+                ->latest()
+                ->take(10)
+                ->get();
         return $changes;
     }
 }

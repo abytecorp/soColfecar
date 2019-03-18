@@ -17,6 +17,7 @@ class CreateCompanyStatesTable extends Migration
             $table->increments('id');
             $table->string('company_state')->unique();
             $table->string('slug')->unique();
+            $table->string('icon')->nullable;
             $table->longtext('description');
             $table->timestamps();
         });

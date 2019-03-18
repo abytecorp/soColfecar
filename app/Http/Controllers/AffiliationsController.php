@@ -126,7 +126,7 @@ class AffiliationsController extends Controller
                 $request->all()
             );
             Change::create([
-                'description' => 'Actualizo datos la empresa :'.$request['bs:_name'].' correctamente.',
+                'description' => 'Actualizo datos la empresa :'.$request['bs_name'].' correctamente.',
                 'id_user' => Auth::user()->id,
                 'id_item' => 7
             ]);

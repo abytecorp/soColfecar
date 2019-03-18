@@ -8,7 +8,7 @@
                         <div class="col-md-12">
                             <div class="d-flex no-block align-items-center">
                                 <div>
-                                    <h3><i class="icon-screen-desktop"></i></h3>
+                                    <h3><i :class="cmpState.icon"></i></h3>
                                     <p class="text-muted">{{ cmpState.company_state }}</p>
                                 </div>
                                 <div class="ml-auto">
@@ -26,8 +26,25 @@
                 </a>
             </div>
         </div>
+        <div class="row">
+                    <div class="col-lg-12 col-xlg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="button-group">
+                                    <!-- <button type="button" class="btn waves-effect waves-light btn-primary">Primary</button>
+                                    <button type="button" class="btn waves-effect waves-light btn-secondary">Secondary</button>
+                                    <button type="button" class="btn waves-effect waves-light btn-success">Success</button> -->
+                                    <button type="button" class="btn waves-effect waves-light btn-info" @click="showNewAffiliationModal"><i class="fa fa-check"></i> Nuevo proceso de afiliacion</button>
+                                    <!-- <button type="button" class="btn waves-effect waves-light btn-warning">Warning</button>
+                                    <button type="button" class="btn waves-effect waves-light btn-danger">Danger</button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
         <div v-if="cmpStatSel != null"><datatable-cmp-by-status :data="cmpsByStat" @updateDataTable="showTable"></datatable-cmp-by-status></div>  
         <changes :item_id="7" ></changes>
+        <new-affiliation></new-affiliation>
     </div>
 </template>
 
@@ -41,6 +58,7 @@ import moment from 'moment';
 import compCant from './comp-cant';
 import datatableCmpByStatus from './Datatable-cmp-by-status';
 import changes from './Changes';
+import newAffiliation from './New_affiliation';
 
 moment.locale('es');
 //import raphael from 'raphael';
@@ -54,6 +72,7 @@ export default {
         compCant,
         datatableCmpByStatus,
         changes,
+        newAffiliation,
     },
     data () {
         return {
@@ -115,9 +134,10 @@ export default {
         },
         setUpdateCmp : function () {
             console.log('testing')
+        },
+        showNewAffiliationModal : function () {
+            $('#newAffiliationModal').modal('show')
         }
-
-
     }
 }
 

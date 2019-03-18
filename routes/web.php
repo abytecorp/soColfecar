@@ -223,7 +223,9 @@ Route::middleware(['auth'])->group(function(){
         //get all users that is active
         Route::get('/api/get-users/','UserController@getUsers');
         //get the changes by month
-        Route::any('/api/get-changes-by-month/{currentDate}/{initDate}','ChangesController@getChangesByMonth');
+        Route::get('/api/get-changes-by-month/{currentDate}/{initDate}/{item_id}','ChangesController@getChangesByMonth');
+        //get changes by user_id
+        Route::get('/api/get-changes-by-user/{user}','ChangesController@getChangesByUser');
 
     //Chapters
     Route::post('chapter/store', 'ChapterController@store')->name('chapter.store');
