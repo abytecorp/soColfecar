@@ -14,6 +14,9 @@ export default {
     },
     created: function() {
         this.getCompaniesByState()
+        this.$bus.$on('comp-cant-up',() => {
+            this.getCompaniesByState()
+        })
     },
     methods: {
         getCompaniesByState : function() {

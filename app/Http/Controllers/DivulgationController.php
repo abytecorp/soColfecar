@@ -163,7 +163,9 @@ class DivulgationController extends Controller
     }
     public function getCities()
     {
-        return $city = City::with('getDepartament')->get();
+        return $city = City::select(DB::raw('CONCAT(cities.city," ( ",departaments.departament," ) ") AS city'),'cities.id','cities.id_departament','departaments.departament')
+            ->join('departaments','cities.id_departament','departaments.id')
+            ->get();
     }
     public function getHotels()
     {

@@ -822,7 +822,7 @@
                         <label for="id_company_state">Seleccione la ciudad(*)</label>
                             <v-select :options="cities" v-model="new_id_city"  label="city">
                                 <template slot="option" slot-scope="option">
-                                    {{ option.city }} ( {{ option.get_departament.departament }}  )
+                                    {{ option.city }} 
                                 </template>
                             </v-select>
                             <!-- v select -->

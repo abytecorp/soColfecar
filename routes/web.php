@@ -226,6 +226,8 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/api/get-changes-by-month/{currentDate}/{initDate}/{item_id}','ChangesController@getChangesByMonth');
         //get changes by user_id
         Route::get('/api/get-changes-by-user/{user}','ChangesController@getChangesByUser');
+        //get company types to API
+        Route::get('/api/get-company-types','CompanyTypeController@getCompanyTypes');
 
     //Chapters
     Route::post('chapter/store', 'ChapterController@store')->name('chapter.store');
@@ -252,7 +254,9 @@ Route::middleware(['auth'])->group(function(){
     Route::get('chapter/{chapter}/get-chapter','ChapterController@getChapter');
 
 
-//CRUD   
+//CRUD
+        Route::post('affiliations/store', 'AffiliationsController@store')->name('affiliations.store')
+                ->middleware('permission_sh:affiliations.create');
             
    Route::get('affiliations', 'AffiliationsController@index')->name('affiliations.index')
            ->middleware('permission_sh:affiliations.index');

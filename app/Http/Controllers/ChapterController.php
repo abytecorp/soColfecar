@@ -18,7 +18,6 @@ class ChapterController extends Controller
      */
     public function store(CreateChapterRequest $request)
     {
- 
         $exploded = explode(',', $request->banner);
         $decoded = base64_decode($exploded[1]);
         if(str_contains($exploded[0],'jpeg'))

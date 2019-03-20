@@ -51,25 +51,31 @@ class AffiliationsController extends Controller
      */
     public function store(CreateCompanyRequest $request)
     {
-        $title = 'Empresas ';
-        $logo = $request->file('logo');
-        $company = Company::create([
-            'bs_name' => $request['bs_name'],
-            'acronym' => $request['acronym'],
-            'nit' => $request['nit'],
-            'id_company_type' => $request['id_company_type'],
-            'web' => $request['web'],
-            'email' => $request['email'],
-            'logo' => $logo->store('logos','public'),
-            'id_cmp_state' => 1,
-            'us_cr' => Auth::user()->id
-        ]);
+        if($request['logoChanged']){
+            $exploded = explode(',', $request->logo);
+                    $decoded = base64_decode($exploded[1]);
+            if(str_contains($exploded[0],'jpeg'))
+                $extension = 'jpg';
+            else
+                $extension = 'png';
+            $fileName = str_random().'.'.$extension;
+            $path = public_path().'/storage/logos/'.$fileName;
+            file_put_contents($path, $decoded);
+            $logo = $request->file['logo'];
+            $request['logo'] = $fileName;
+            }else{
+                $request['logo'] = '';
+            }
+            $request['bs_name'] = strtoupper($request['bs_name']);
+            $request['acronym'] = strtoupper($request['acronym']);
+            $request['id_status'] = 1;
+            $request['us_cr'] = Auth::user()->id;
+        $company = Company::create($request->all());
         Change::create([
-            'description' => 'Creo la empresa:'.$request['bs_name'].'   correctamente.',
-            'id_item' => 7,
+            'description' => 'Ha creado el capitulo: ['.$request['chapter'].'] correctamente.',
             'id_user' => Auth::user()->id,
         ]);
-        return view('affiliations.tasks', compact('title','company'));
+        return;
     }
 
     /**

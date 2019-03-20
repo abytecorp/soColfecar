@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="card-group">
+        <div class="card-group" >
             <div class="card" v-for="cmpState in cmpStates" :key="cmpState.id" >
                 <a href="#" @click="showTable(cmpState.id)">
                 <div class="card-body">
@@ -12,7 +12,7 @@
                                     <p class="text-muted">{{ cmpState.company_state }}</p>
                                 </div>
                                 <div class="ml-auto">
-                                    <h2 class="counter text-primary"><comp-cant :data="cmpState.id"></comp-cant></h2>
+                                    <h2 class="counter text-primary"><div v-if="reloadCmpState == true"><comp-cant :data="cmpState.id"></comp-cant></div></h2>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
         </div>
         <div v-if="cmpStatSel != null"><datatable-cmp-by-status :data="cmpsByStat" @updateDataTable="showTable"></datatable-cmp-by-status></div>  
         <changes :item_id="7" ></changes>
-        <new-affiliation></new-affiliation>
+        <new-affiliation @updateDataTable="compCant.getCompaniesByState()"></new-affiliation>
     </div>
 </template>
 
@@ -84,6 +84,7 @@ export default {
             count:              [],
             errors:             [],
             cmpStatSel:         null,
+            reloadCmpState:     true,
         }
     },
     created: function() {
@@ -116,12 +117,14 @@ export default {
         },
         getCompanies : function() {
             console.log('get companies its ejected')
+            this.reloadCmpState = false
             let url = 'affiliations/get-companies'
             axios.get(url).then(response => {
                 this.companies = response.data
             }).catch(error => {
                 this.errors = error.response.data
             });
+            this.reloadCmpState = true
         },
         showTable : function (id) {
             this.cmpStatSel = id

@@ -26,8 +26,9 @@ class CreateCompanyRequest extends FormRequest
         return [
             'bs_name' => ['required', 'max:120', 'unique:companies'],
             'email' => ['required', 'email', 'unique:companies'],
-            'nit' => ['unique:companies', 'max:9'],
-            'logo' => ['required','max:500','image'],
+            'nit' => ['unique:companies', 'max:9', 'min:9'],
+            'id_city' => ['required']
+            //'logo' => ['required'],
         ];
     }
     public function messages()
@@ -39,11 +40,13 @@ class CreateCompanyRequest extends FormRequest
             'email.required' => 'Porfavor ingrese el correo electronico',
             'email.email' => 'Ingrese un correo electronico valido',
             'email.unique' => 'Este correo ya pertenece a otra empresa',
-            'nit.max' => 'El NIT se debe ingresar sin el digito de verificación.',
             'nit.unique' => 'ya existe una empresa inscrita con este NIT',
+            'nit.max' => 'El nit debe contener maximo 9 digitos',
+            'nit.min' => 'El nit debe contener minimo 9 digitos',
+            'id_city.required' => 'Debe ingresar la ciudad de la empresa',
             'logo.required' => 'Debe agregar una imagen para establecer el logo de la Empresa',
-            'logo.max' => 'El tamaño del archivo no debe superar el peso de 500kb.',
-            'logo.image' => 'El archivo debe ser una imajen en formato JPG o PNG',
+            // 'logo.max' => 'El tamaño del archivo no debe superar el peso de 500kb.',
+            // 'logo.image' => 'El archivo debe ser una imajen en formato JPG o PNG',
         ];
     }
 }

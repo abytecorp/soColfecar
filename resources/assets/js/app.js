@@ -29,7 +29,7 @@ require('../dist/js/form-addons.js');
 require('../assets/node_modules/Magnific-Popup-master/dist/jquery.magnific-popup.min.js');
 require('../assets/node_modules/Magnific-Popup-master/dist/jquery.magnific-popup-init.js');
 require('../assets/node_modules/sparkline/jquery.sparkline.min.js');
-require('../assets/node_modules/sticky-kit-master/dist/sticky-kit.min.js');
+// require('../assets/node_modules/sticky-kit-master/dist/sticky-kit.min.js');
 
 
 // require( 'datatables.net' )
@@ -71,6 +71,8 @@ Vue.component('trade-union-argumentation', require('./components/Trade-union-arg
 
 
 Vue.component('dashboard-af', require('./components/Dashboard-af.vue').default);
+import EventBus from './plugins/event-bus'
+Vue.use(EventBus)
 
 
 const app = new Vue({

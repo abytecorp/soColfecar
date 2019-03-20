@@ -105,4 +105,9 @@ class CompanyTypeController extends Controller
 
         return back()->with('info', 'Eliminado correctamnte');
     }
+    public function getCompanyTypes()
+    {
+        $company_types = Company_type::where('id_status',1)->get();
+        return $company_types;
+    }
 }
