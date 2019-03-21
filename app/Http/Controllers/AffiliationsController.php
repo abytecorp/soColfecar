@@ -72,7 +72,8 @@ class AffiliationsController extends Controller
             $request['us_cr'] = Auth::user()->id;
         $company = Company::create($request->all());
         Change::create([
-            'description' => 'Ha creado el capitulo: ['.$request['chapter'].'] correctamente.',
+            'description' => 'Ha creado la empresa: ['.$request['bs_name'].'] correctamente.',
+            'id_item' => 7,
             'id_user' => Auth::user()->id,
         ]);
         return;

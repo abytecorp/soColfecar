@@ -29,7 +29,7 @@ class ChangesController extends Controller
                 ->where('changes.id_item',$item)
                 ->latest()
                 ->take(10)
-                ->get();
+                ->orderBy('changes.created_at','DESC')->get();
         return $changes;
     }
     public function getChangesByMonth($currentDate,$initDate,$item_id)
@@ -38,7 +38,8 @@ class ChangesController extends Controller
             'changes.id_item','users.name','users.last_name','users.avtr')
             ->join('users', 'users.id','=','changes.id_user')
             ->whereBetween('changes.created_at', [$initDate,$currentDate])
-            ->where('id_item',$item_id)->get();
+            ->where('id_item',$item_id)
+            ->orderBy('changes.created_at','DESC')->get();
         return $changes;
     }
     public function getChangesByUser($user)
@@ -49,7 +50,7 @@ class ChangesController extends Controller
                 ->where('changes.id_user',$user)
                 ->latest()
                 ->take(10)
-                ->get();
+                ->orderBy('changes.created_at','DESC')->get();
         return $changes;
     }
 }

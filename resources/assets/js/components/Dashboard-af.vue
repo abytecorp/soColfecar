@@ -2,7 +2,7 @@
     <div>
         <div class="card-group" >
             <div class="card" v-for="cmpState in cmpStates" :key="cmpState.id" >
-                <a href="#" @click="showTable(cmpState.id)">
+                <a href="#" @click="showTable(cmpState.id,cmpState.company_state)">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -126,11 +126,12 @@ export default {
             });
             this.reloadCmpState = true
         },
-        showTable : function (id) {
+        showTable : function (id,company_state) {
             this.cmpStatSel = id
             let url = 'affiliations/companies-by-state/'+id
             axios.get(url).then(response =>{
                 this.cmpsByStat = response.data
+                this.cmpsByStat.fileName = company_state
             }).catch(error => {
             this.errors = error.response.data
             });

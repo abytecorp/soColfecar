@@ -278,6 +278,7 @@ export default {
             axios.post(url, this.company).then(response =>{
                 //this.responseTest = response.data
                 this.$bus.$emit('comp-cant-up')
+                this.$bus.$emit('changes-up')
                 this.company.acronym=              '',
                 this.company.address=              '',
                 this.company.bs_name=              '',

@@ -90,6 +90,9 @@ export default {
         this.getUsers();
         this.getCurrentDate();
         this.getChangesByMonth();
+        this.$bus.$on('changes-up',() => {
+            this.getChangesByMonth()
+        })
     },
     methods: {
         since : function(d) {

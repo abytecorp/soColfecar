@@ -386,8 +386,8 @@
                         <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="icon-bubble"></i><span class="hide-menu">Configuracion </span></a>
                             <ul aria-expanded="false" class="collapse">
                             <li><a href="{{ route('roles.index') }}"> Roles  </a></li>
-                            <li><a href="{{ route('company_states.index') }}"> Estados de empreesas  </a></li>
-                            <li><a href="{{ route('company_types.index') }}"> Tipos de empreesas  </a></li>
+                            <li><a href="{{ route('company_states.index') }}"> Estados de empresas  </a></li>
+                            <li><a href="{{ route('company_types.index') }}"> Tipos de empresas  </a></li>
                              </ul>
                         </li>
                         @endcan

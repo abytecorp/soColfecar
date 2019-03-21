@@ -4,8 +4,22 @@
       <el-row>
         <el-col :span="18">
           <!-- <el-button @click="createChapter">Crear Capitulo</el-button> -->
-          <el-button @click="showConf">Configuraciones</el-button>
-          <!-- <el-button @click="bulkDelete">bulk delete</el-button> -->
+        
+            
+            <download-excel
+              :data="data" class="btn btn-success" :name="data.fileName+'.xls'">
+              <i class="fa fa-file-excel-o"></i>
+              Generar archivo Excel
+              <!-- <img src="download_icon.png"> -->
+            </download-excel>
+       
+          
+       
+          <button type="submit" class="btn btn-primary" @click="pdfGen">
+            <i class="fa fa-file-pdf-o"></i>
+            Generar Archivo PDF
+          </button>
+        
         </el-col>
 
         <el-col :span="6">
@@ -155,13 +169,17 @@ import Swal from 'sweetalert2'
 import payOrNot from '../filters/pay-or-not'
 import addressGen from './Address-gen'
 
+import JsonExcel from 'vue-json-excel'
+import jsPDF from 'jsPDF'
+ 
+Vue.component('downloadExcel', JsonExcel)
 Vue.use(payOrNot)
 
 export default {
   components: {
     addressGen
   },
-    props: ['data'],
+    props: ['data','fileName'],
   data() {
     return {
       companyUpdate: {
@@ -292,6 +310,8 @@ export default {
       let url = 'affiliations/'+id
       axios.put(url, this.companyUpdate).then(response =>{
         this.$emit('updateDataTable',this.companyUpdate.id_cmp_state)
+        this.$bus.$emit('comp-cant-up')
+        this.$bus.$emit('changes-up')
         this.companyUpdate.acronym=              '',
         this.companyUpdate.address=              '',
         this.companyUpdate.afiliation_state_id=  '',
@@ -393,6 +413,12 @@ export default {
         this.companyUpdate.city_id=              ''
         this.companyUpdate.company_id=           ''
       }
+    },
+    pdfGen : function () {
+      let pdfName = this.data.fileName; 
+      var doc = new jsPDF();
+      doc.text(pdfName, 10, 10);
+      doc.save(pdfName + '.pdf');
     }
   }
 }
