@@ -64,6 +64,7 @@ Route::middleware(['auth'])->group(function(){
             //Afiliaciones
         Route::post('affiliations/store', 'AffiliationsController@store')->name('affiliations.store');
         Route::get('affiliations/estados', 'AffiliationsController@obestados')->name('estados-empresas.get');
+        Route::get('affiliations/get-all-states', 'AffiliationsController@getAllStates')->name('estados-empresas.get');
         Route::get('affiliations/changes/{module}/', 'AffiliationsController@getChanges')->name('affiliations-changes.get');
         Route::get('affiliations/company/{id_cmp_state}', 'AffiliationsController@getCompanies')->name('affiliations-getCompanies');
         Route::get('affiliations/get-companies', 'AffiliationsController@getCompaniesApi');

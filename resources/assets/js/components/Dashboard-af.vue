@@ -35,8 +35,8 @@
                                     <button type="button" class="btn waves-effect waves-light btn-secondary">Secondary</button>
                                     <button type="button" class="btn waves-effect waves-light btn-success">Success</button> -->
                                     <button type="button" class="btn waves-effect waves-light btn-info" @click="showNewAffiliationModal"><i class="fa fa-check"></i> Nuevo proceso de afiliacion</button>
-                                    <!-- <button type="button" class="btn waves-effect waves-light btn-warning">Warning</button>
-                                    <button type="button" class="btn waves-effect waves-light btn-danger">Danger</button> -->
+                                    <button type="button" class="btn waves-effect waves-light btn-warning" @click="showConfAffModul">Configuraciones</button>
+                                    <!-- <button type="button" class="btn waves-effect waves-light btn-danger">Danger</button> -->
                                 </div>
                             </div>
                         </div>
@@ -45,6 +45,7 @@
         <div v-if="cmpStatSel != null"><datatable-cmp-by-status :data="cmpsByStat" @updateDataTable="showTable"></datatable-cmp-by-status></div>  
         <changes :item_id="7" ></changes>
         <new-affiliation @updateDataTable="compCant.getCompaniesByState()"></new-affiliation>
+        <conf-affiliations-module></conf-affiliations-module>
     </div>
 </template>
 
@@ -59,6 +60,7 @@ import compCant from './comp-cant';
 import datatableCmpByStatus from './Datatable-cmp-by-status';
 import changes from './Changes';
 import newAffiliation from './New_affiliation';
+import confAffiliationsModule from './Conf-affiliations-module';
 
 moment.locale('es');
 //import raphael from 'raphael';
@@ -73,6 +75,7 @@ export default {
         datatableCmpByStatus,
         changes,
         newAffiliation,
+        confAffiliationsModule,
     },
     data () {
         return {
@@ -141,6 +144,9 @@ export default {
         },
         showNewAffiliationModal : function () {
             $('#newAffiliationModal').modal('show')
+        },
+        showConfAffModul : function () {
+            $('#confAffiliationsModulModal').modal('show')
         }
     }
 }

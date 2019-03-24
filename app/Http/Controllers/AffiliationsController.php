@@ -156,6 +156,12 @@ class AffiliationsController extends Controller
         //dd($company_states);
         return $company_states;
     }
+    public function getAllStates(Request $request)
+    {
+        $company_states = Company_state::all();
+        //dd($company_states);
+        return $company_states;
+    }
     public function getChanges(Request $request, $module)
     {
         $changes = Change::with('user')
