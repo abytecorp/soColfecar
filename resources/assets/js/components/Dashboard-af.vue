@@ -92,7 +92,10 @@ export default {
     },
     created: function() {
         this.getCompanies();
-        this.getCmpState();   
+        this.getCmpState();
+        this.$bus.$on('get-company-states', () => {
+            this.getCmpState()
+        })
     },
     computed: {
         howManyComp (id) {

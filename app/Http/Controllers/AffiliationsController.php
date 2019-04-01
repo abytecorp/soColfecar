@@ -5,6 +5,10 @@ namespace soColfecar\Http\Controllers;
 use Illuminate\Http\Request;
 use soColfecar\Http\Requests\CreateCompanyRequest;
 use soColfecar\Http\Requests\UpdateCompanyRequest;
+use soColfecar\Http\Requests\CreateCompanyStateRequest;
+use soColfecar\Http\Requests\UpdateCompanyStateRequest;
+use soColfecar\Http\Requests\CreateCompanyTypeRequest;
+use soColfecar\Http\Requests\UpdateCompanyTypeRequest;
 use Caffeinated\Shinobi\Models\Role;
 use soColfecar\Company_state;
 use soColfecar\Company_type;
@@ -12,6 +16,7 @@ use soColfecar\Change;
 use soColfecar\Company;
 use soColfecar\Event_type;
 use soColfecar\Item;
+use soColfecar\Icon;
 use Auth;
 
 class AffiliationsController extends Controller
@@ -152,7 +157,7 @@ class AffiliationsController extends Controller
     }
     public function obestados(Request $request)
     {
-        $company_states = Company_state::all();
+        $company_states = Company_state::where('id_status',1)->get();
         //dd($company_states);
         return $company_states;
     }
@@ -208,5 +213,112 @@ class AffiliationsController extends Controller
             ->join('cities','companies.id_city','cities.id')
             ->first();
         return $company;
+    }
+    public function setCompanyStateStatus($setvalue,$id)
+    {
+        $company_state = Company_state::where('id',$id)->first();
+        $company_state['id_status'] = $setvalue;
+        $company_state->update();
+        if($setvalue == 1){
+        Change::create([
+            'description' => 'Activo el estado :'.$company_state['company_state'],
+            'id_user' => Auth::user()->id,
+            'id_item' => 7
+        ]);
+        }else{
+            Change::create([
+                'description' => 'Desactivo el estado :'.$company_state['company_state'],
+                'id_user' => Auth::user()->id,
+                'id_item' => 7
+            ]);
+        }
+        return;
+    }
+    public function getIcons()
+    {
+        return $icons = Icon::all();
+    }
+    public function storeCompanyState(CreateCompanyStateRequest $request)
+    {
+        $company_state = Company_state::create($request->all());
+        Change::create([
+            'description' => 'Creo el estado de empresa: ['.$request['company_state'].'].',
+            'id_item' => 7,
+            'id_user' => Auth::user()->id,
+        ]);
+        return;
+    }
+    public function getCompanyState($request)
+    {
+        $company_state = Company_state::where('id',$request)->first();
+        return $company_state;
+    }
+    public function stateUpdate(UpdateCompanyStateRequest $request)
+    {
+        $company_state = Company_state::where('id',$request['id'])->first();
+        $company_state->update(
+            $request->all()
+        );
+        Change::create([
+            'description' => 'Edito el estado de empresa: ['.$request['company_state'].'].',
+            'id_item' => 7,
+            'id_user' => Auth::user()->id,
+        ]);
+        return;
+    }
+
+    //manage type options
+    public function storeCompanyType(CreateCompanyTypeRequest $request)
+    {
+        $company_type = Company_type::create($request->all());
+        Change::create([
+            'description' => 'Creo el tipo de empresa: ['.$request['company_type'].'].',
+            'id_item' => 7,
+            'id_user' => Auth::user()->id,
+        ]);
+        return;
+    }
+    public function getCompanyType($request)
+    {
+        $company_type = Company_type::where('id',$request)->first();
+        return $company_type;
+    }
+    public function typeUpdate(UpdateCompanyTypeRequest $request)
+    {
+        $company_type = Company_type::where('id',$request['id'])->first();
+        $company_type->update(
+            $request->all()
+        );
+        Change::create([
+            'description' => 'Edito el tipo de empresa: ['.$request['company_type'].'].',
+            'id_item' => 7,
+            'id_user' => Auth::user()->id,
+        ]);
+        return;
+    }
+    public function setCompanyTypeStatus($setvalue,$id)
+    {
+        $company_type = Company_type::where('id',$id)->first();
+        $company_type['id_status'] = $setvalue;
+        $company_type->update();
+        if($setvalue == 1){
+        Change::create([
+            'description' => 'Activo el estado :'.$company_type['company_type'],
+            'id_user' => Auth::user()->id,
+            'id_item' => 7
+        ]);
+        }else{
+            Change::create([
+                'description' => 'Desactivo el tipo de empresa :'.$company_type['company_type'],
+                'id_user' => Auth::user()->id,
+                'id_item' => 7
+            ]);
+        }
+        return;
+    }
+    public function getAllTypes(Request $request)
+    {
+        $company_types = Company_type::all();
+        return $company_types;
     }
 }

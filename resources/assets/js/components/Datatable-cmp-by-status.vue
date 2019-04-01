@@ -37,6 +37,7 @@
     </data-tables>
 <hr>
 
+<contacts-manage v-if="isContactSelected" :data="isContactSelected" ></contacts-manage>
 
 <!-- modal update chapter -->
         <div id="modalUpdateCompany" class="modal fade bs-example-modal-lg"  role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
@@ -158,7 +159,6 @@ Vue.use(ElementUI)
 import lang from 'element-ui/lib/locale/lang/es'
 import locale from 'element-ui/lib/locale'
 
-
 locale.use(lang)
 import { DataTables, DataTablesServer } from 'vue-data-tables'
 Vue.use(DataTables)
@@ -167,7 +167,10 @@ Vue.use(DataTablesServer)
 import moment from 'moment'
 import Swal from 'sweetalert2'
 import payOrNot from '../filters/pay-or-not'
+
+//import modules
 import addressGen from './Address-gen'
+import contactsManage from './Contacts-manage';
 
 import JsonExcel from 'vue-json-excel'
 import jsPDF from 'jsPDF'
@@ -177,7 +180,8 @@ Vue.use(payOrNot)
 
 export default {
   components: {
-    addressGen
+    addressGen,
+    contactsManage
   },
     props: ['data','fileName'],
   data() {
@@ -199,13 +203,14 @@ export default {
         phone3:               '',
         web:                  '',
       },
-      imageData:          null,//preview form image
-      logoChanged:      false,
-      cities:  [],
-      errors: [],
+      imageData:              null,//preview form image
+      logoChanged:            false,
+      cities:                 [],
+      errors:                 [],
+      isContactSelected:      null,
       titles: [{prop:'bs_name',label:'Razon Social',key:'bs_name'},{prop:'email',label:'Em@il',key:'email'},{prop:'nit',label:'NIT',key:'nit'}],
       filters: [{
-        prop: ['bs_name'],
+        prop: ['bs_name','nit','email'],
         value: ''
       }],
       actionCol: {
@@ -219,15 +224,18 @@ export default {
           handler: row => {
               this.updateCompany(row.id)
           },
-          label: 'Editar'
+          //label: 'Editar'
+          icon: 'fa fa-edit'
         },{
           props: {
-            type: 'danger'
+            type: 'success'
           },
           handler: row => {
-              //this.$emit('updateAlimentsModal', row.record_id)  
+              //this.$emit('updateAlimentsModal', row.record_id)
+              this.showContactsTable(row.id)
           },
-          label: 'Finalizar'
+          //label: 'Contactos'
+          icon: 'fa fa-address-book-o'
         }]
       },
       selectedRow: []
@@ -235,6 +243,9 @@ export default {
   },
   created: function() {
     this.getCities()
+    this.$bus.$on('set-null-isContactSelected', (val) => {
+      this.showContactsTable(val)
+    })
   },
   methods: {
     getLogo : function (e) {
@@ -419,6 +430,9 @@ export default {
       var doc = new jsPDF();
       doc.text(pdfName, 10, 10);
       doc.save(pdfName + '.pdf');
+    },
+    showContactsTable : function (val) {
+      this.isContactSelected = this.isContactSelected == val ? null : val
     }
   }
 }

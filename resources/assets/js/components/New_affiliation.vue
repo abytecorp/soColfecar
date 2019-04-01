@@ -247,6 +247,9 @@ export default {
     created : function (){
         this.getCompanyTypes()
         this.getCities()
+        this.$bus.$on('get-company-types', () => {
+            this.getCompanyTypes()
+        })
     },
     methods : {
         getCities() {

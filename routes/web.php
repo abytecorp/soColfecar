@@ -65,10 +65,20 @@ Route::middleware(['auth'])->group(function(){
         Route::post('affiliations/store', 'AffiliationsController@store')->name('affiliations.store');
         Route::get('affiliations/estados', 'AffiliationsController@obestados')->name('estados-empresas.get');
         Route::get('affiliations/get-all-states', 'AffiliationsController@getAllStates')->name('estados-empresas.get');
+        Route::get('affiliations/set-company-state-status/{setvalue}/{id}', 'AffiliationsController@setCompanyStateStatus');
         Route::get('affiliations/changes/{module}/', 'AffiliationsController@getChanges')->name('affiliations-changes.get');
         Route::get('affiliations/company/{id_cmp_state}', 'AffiliationsController@getCompanies')->name('affiliations-getCompanies');
         Route::get('affiliations/get-companies', 'AffiliationsController@getCompaniesApi');
         Route::get('affiliations/companies-by-state/{state_company}', 'AffiliationsController@getCompaniesByState');
+        Route::get('affiliations/get-company-state/{state}', 'AffiliationsController@getCompanyState');
+        Route::post('company-state/store', 'AffiliationsController@storeCompanyState');
+        Route::put('company-state/{state}','AffiliationsController@stateUpdate');
+
+        Route::get('affiliations/get-company-type/{type}', 'AffiliationsController@getCompanyType');
+        Route::post('company-type/store', 'AffiliationsController@storeCompanyType');
+        Route::put('company-type/{type}','AffiliationsController@typeUpdate');
+        Route::get('affiliations/set-company-type-status/{setvalue}/{id}', 'AffiliationsController@setCompanyTypeStatus');
+        Route::get('affiliations/get-all-types', 'AffiliationsController@getAllTypes');
 
 //API
         //get assets to normally address
@@ -186,6 +196,12 @@ Route::middleware(['auth'])->group(function(){
 
         //change the lunch status
         Route::get('/api/records-lunch-update/{record}/{lucnh}/{value}','RecordController@lunchStatus');
+
+        //get the icons
+        Route::get('/api/get-icons','AffiliationsController@getIcons');
+
+        //get assitant by id
+        Route::get('/api/get-assistant-by-id/{assistant}','DivulgationController@getAssitantById');
 
         
 

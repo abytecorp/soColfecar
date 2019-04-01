@@ -137,7 +137,12 @@ class DivulgationController extends Controller
     }
     public function getAssistantsByCompany($company)
     {
-        $assistants = Assistant::where('id_company',$company)->get();
+        $assistants = Assistant::select(DB::raw('CONCAT(IFNULL(assistants.names,"")," ",IFNULL(assistants.last_names,"")) AS full_name'),'assistants.id','assistants.names','assistants.last_names','assistants.id_type','assistants.id_number','assistants.id_city','assistants.address',
+            'assistants.tel','assistants.cel','assistants.position','assistants.email','assistants.id_company','assistants.id_status','status.status')
+            ->where('assistants.id_company',$company)
+            ->where('assistants.id_status',1)
+            ->join('status', 'assistants.id_status','=','status.id')
+            ->get();
         return $assistants;
     }
     public function getPlans($event)
@@ -391,11 +396,6 @@ class DivulgationController extends Controller
                         $bill->delete();
                     }
             }
-            
-            
-            
-
-       
         $record->delete();
         Change::create([
             'description' => 'Elimino Registro '.$record->id.' correctamente.',
@@ -451,5 +451,16 @@ class DivulgationController extends Controller
             'id_user' => Auth::user()->id,
         ]);
         return;
+    }
+    public function getAssitantById($request)
+    {
+        $assistant = Assistant::select('assistants.id','assistants.names','assistants.last_names','assistants.id_type','assistants.id_number',
+            'assistants.id_city','assistants.address', 'assistants.tel','assistants.cel','assistants.position','assistants.email','assistants.id_company',
+            'assistants.id_status','cities.city', 'status.status')
+            ->where('assistants.id', $request)
+            ->join('cities', 'assistants.id_city','=','cities.id')
+            ->join('status', 'assistants.id_status','=','status.id')
+            ->first();
+        return $assistant;
     }
 }
