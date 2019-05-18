@@ -17,6 +17,7 @@ class CreateEventTypesTable extends Migration
             $table->increments('id');
             $table->string('event_type');
             $table->string('slug')->unique();
+            $table->string('icon')->nullable();
             $table->string('description');
             $table->timestamps();
             $table->integer('id_status')->unsigned()->default(1);

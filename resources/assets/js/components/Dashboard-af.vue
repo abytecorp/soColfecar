@@ -44,7 +44,7 @@
         </div>
         <div v-if="cmpStatSel != null"><datatable-cmp-by-status :data="cmpsByStat" @updateDataTable="showTable"></datatable-cmp-by-status></div>  
         <changes :item_id="7" ></changes>
-        <new-affiliation @updateDataTable="compCant.getCompaniesByState()"></new-affiliation>
+        <new-affiliation :companies="companies" @updateDataTable="compCant.getCompaniesByState()"></new-affiliation>
         <conf-affiliations-module></conf-affiliations-module>
     </div>
 </template>

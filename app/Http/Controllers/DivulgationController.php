@@ -140,7 +140,7 @@ class DivulgationController extends Controller
         $assistants = Assistant::select(DB::raw('CONCAT(IFNULL(assistants.names,"")," ",IFNULL(assistants.last_names,"")) AS full_name'),'assistants.id','assistants.names','assistants.last_names','assistants.id_type','assistants.id_number','assistants.id_city','assistants.address',
             'assistants.tel','assistants.cel','assistants.position','assistants.email','assistants.id_company','assistants.id_status','status.status')
             ->where('assistants.id_company',$company)
-            ->where('assistants.id_status',1)
+            //->where('assistants.id_status',1)
             ->join('status', 'assistants.id_status','=','status.id')
             ->get();
         return $assistants;

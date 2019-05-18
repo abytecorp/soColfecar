@@ -1,211 +1,373 @@
 <template>
 <!-- to show this modal have to create a event funtion `newAffiliationModal` in the father model .show --> 
 <div>
-                                <div id="newAffiliationModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title" id="myLargeModalLabel">Nuevo registro de empresa</h4>
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                            </div>
-                                            <div class="modal-body">
-                    <div class="col-lg-12">
+    <div id="newAffiliationModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="myLargeModalLabel">Ingrese datos de la empresa solicitante</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                    <!-- Column -->
+                    <div class="col-lg-4 col-xlg-3 col-md-5">
                         <div class="card">
                             <div class="card-body">
-              <div class="row el-element-overlay">
-                    <div class="col-md-12">
-                        <h4 class="card-title">Ingrese los datos de la nueva Empresa</h4>
-                        <h6 class="card-subtitle m-b-20 text-muted">Al finalizar quedara automaticamente en estado <code>Pendiente documentaciòn</code></h6> </div>
-                    <!-- <div class="col-lg-3 col-md-12">-->
-
-                    <div class="card" v-if="company.logo != '' && imageData == null">
-                        <img class="card-img-top img-responsive" :src="'storage/logos/'+company.logo" alt="Card image cap">
-                        <div class="card-body">
-                            <button type="button" class="btn btn-danger" v-on:click="deleteLogo"><i class="fa fa-trash-o"></i> Eliminar</button>
-                        </div>
-                        <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.logo }}</span>
-                    </div>
- 
-
-                        <div class="card" v-if="company.logo != '' && imageData != null">
-                            <div class="el-card-item">
-                                <div class="el-card-avatar el-overlay-1"> <img :src="imageData"  alt="user" />
-                                    <div class="el-overlay scrl-dwn">
-                                        <ul class="el-info">
-                                            <li><a class="btn default btn-outline" href="#" v-on:click="deleteLogo"><i class="fa fa-trash-o"></i></a></li>
-                                        </ul>
+                                <center class="m-t-30"> <div v-if="imageData"> <a href="#" v-on:click="deleteLogo" ><img :src="imageData" class="img-circle" width="150" /></a></div><div v-else >
+                                    <label for="exampleInputEmail1">Seleccione un archivo de imagen .png o .jpg dando click en <strong>-Browse-</strong></label>
+                                    <div></div>
+                                    <div class="custom-file">
+                                    <input type="file" class="custom-file-input" @change="previewImage" id="customFileUpdate">
+                                    <label class="custom-file-label" for="customFile">Seleccione archivo </label>
+                                    <!-- <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.banner }}</span> -->
                                     </div>
                                 </div>
-                                <div class="el-card-content">
-                                    <button type="button" class="btn btn-danger" v-on:click="deleteLogo"><i class="fa fa-trash-o"></i> Eliminar</button>
-                                    <br/> </div>
+                                    <h4 class="card-title m-t-10">{{ company.bs_name || 'RAZON SOCIAL' }}</h4>
+                                    <h6 class="card-subtitle">{{ company.acronym || 'Siglas'}}</h6>
+                                    <div class="row text-center justify-content-md-center">
+                                        <div class="col-4"><a href="javascript:void(0)" class="link"><i class="icon-people"></i> <font class="font-medium">254</font></a></div>
+                                        <div class="col-4"><a href="javascript:void(0)" class="link"><i class="icon-picture"></i> <font class="font-medium">54</font></a></div>
+                                    </div>
+                                </center>
                             </div>
-                            <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.logo }}</span>
+                            <div>
+                                <hr> </div>
+                            <div class="card-body"> <small class="text-muted">Correo Electronico </small>
+                                <h6>{{ company.mail || 'Aun no se asigna correo' }}</h6> <small class="text-muted p-t-30 db">Telefono</small>
+                                <h6>{{ company.phone1 || 'Aun no se asigna telefono' }}</h6> <small class="text-muted p-t-30 db">Direccion</small>
+                                <h6>{{ company.address || 'Un no se asigna direccion' }}</h6>
+                                <div class="map-box">
+                                    <progress-comp :per="per"></progress-comp>
+                                </div> <small class="text-muted p-t-30 db">Social Profile</small>
+                                <br/>
+                                <button class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></button>
+                                <button class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></button>
+                                <button class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></button>
+                            </div>
                         </div>
+                    </div>
+                    <!-- Column -->
+                    <!-- Column -->
+                    <div class="col-lg-8 col-xlg-9 col-md-7">
+                        <div class="card">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs profile-tab" role="tablist">
+                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Timeline</a> </li>
+                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Profile</a> </li>
+                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Settings</a> </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="home" role="tabpanel">
+                                    <div class="card-body">
+                                        <div class="profiletimeline">
+                                            <div class="sl-item">
+                                                <div class="sl-left"> <button data-toggle="collapse" data-target="#multiCollapseExample1" aria-expanded="false" type="button" :class="[step1 === 'success' ? classSuccess : step1 === 'error' ? classDanger : classNorm]"> 1 </button> </div>
+                                                <div class="sl-right">
+                                                    <div><h4><strong>Datos de la empresa</strong></h4> 
+                                                    <!-- <span class="sl-date">5 minutes ago</span> -->
+                                                    <div class="collapse multi-collapse" id="multiCollapseExample1">
+                                                    <form class="form-material m-t-40 row">
+                                                        <div class="form-group col-md-12 m-t-20"> 
+                                                                <FloatingLabel
+                                                                    :config="{label: 'Razon Social', hasError: err.bs_name, hasClearButton: false }">
+                                                                    <input name="bs_name" v-model="company.bs_name" type="text" @keyup="validateStep1()" @>
+                                                                </FloatingLabel>
+                                                                <span v-if="err.bs_name" class="text-danger" >{{ err.bs_name }}</span>
+                                                        </div>
+                                                        <div class="form-group col-md-12 m-t-20">         
+                                                                <FloatingLabel
+                                                                    :config="{label: 'Siglas de la empresa', hasError: false, hasClearButton: false }">
+                                                                    <input name="acronym" v-model="company.acronym" type="text">
+                                                                </FloatingLabel>
+                                                        </div>
+                                                                
+                                                    <div class="form-group col-md-8 m-t-20">            
+                                                                <FloatingLabel
+                                                                    :config="{label: 'NIT', hasError: err.nit, hasClearButton: false }">
+                                                                    <input name="nit" v-model="company.nit" type="number" @keyup="validateNit(),validateStep1()" @onblur="validateNit(),validateStep1()">
+                                                                </FloatingLabel>
+                                                                <span v-if="err.nit" class="text-danger" >{{ err.nit }}</span>
+                                                    </div> 
+                                                    <div class="form-group col-md-2 m-t-20"> 
+                                                                <FloatingLabel
+                                                                    :config="{label: 'DV', hasError: false, hasClearButton: false }">
+                                                                    <input name="dv" v-model="company.verification_digit" type="number">
+                                                                </FloatingLabel>
+                                                    </div>       
+                                                    </form>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="sl-item">
+                                                <div class="sl-left"> <button data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2 multiCollapseExample2" type="button" :class="[step2 === 'success' ? classSuccess : step2 === 'error' ? classDanger : classNorm]"> 2 </button> </div>
+                                                <div class="sl-right">
+                                                    <div><h4><strong>Representante Legal</strong></h4> 
+                                                        <div class="collapse multi-collapse" id="multiCollapseExample2">
+                                                            <form class="form-material m-t-40 row">
+                                                            <div class="form-group col-md-12 m-t-20">
+                                                            <FloatingLabel
+                                                                :config="{label: 'Nombres del representante legal', hasError: err.LRNames }">
+                                                                <input name="LRNames" v-model="legalRepresentative.names" type="text" @keyup="validateStep2()">
+                                                            </FloatingLabel>
+                                                            <span v-if="err.LRNames" class="text-danger" >{{ err.LRNames }}</span>
+                                                            </div>
 
-                    <div v-else>
-                      <div class="form-group m-form__group">
-                        <label for="exampleInputEmail1">Seleccione un archivo de imagen .png o .jpg dando click en <strong>-Browse-</strong></label>
-                        <div></div>
-                        <div class="custom-file">
-                          <input type="file" class="custom-file-input" @change="previewImage" id="customFileUpdate">
-                          <label class="custom-file-label" for="customFile">Seleccione archivo</label>
-                          <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.logo }}</span>
-                        </div>
-                      </div>
-                    </div>
-                <!-- </div> -->
-            </div>
-                                <form v-on:submit.prevent="storeCompany">
-                                    <div class="form-group row">
-                                        <label for="bs_name" class="col-sm-3 control-label">Razon social*</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-building"></i></span></div>
-                                                <input type="text" class="form-control" id="bs_name" v-model="company.bs_name" placeholder="Razon social de la empresa">
+                                                            <div class="form-group col-md-12 m-t-20">
+                                                            <FloatingLabel
+                                                                :config="{label: 'Apellidos del representante legal', hasError: err.LRLastNames }">
+                                                                <input name="LRLastNames" v-model="legalRepresentative.last_names" type="text" @keyup="validateStep2()">
+                                                            </FloatingLabel>
+                                                            <span v-if="err.LRLastNames" class="text-danger" >{{ err.LRLastNames }}</span>
+                                                            </div>
+
+                                                            <div class="form-group col-md-4 m-t-20">
+                                                            <div class="form-group">
+                                                                <label class="text-muted">TI</label>
+                                                                <select class="form-control" v-model="legalRepresentative.type_id_id">
+                                                                    <option v-for="idType in idTypes" :key="idType.id" :value="idType.id">{{idType.id_type}}</option>
+                                                                </select>
+                                                            </div>
+                                                            <span v-if="err.LRIDType" class="text-danger" >{{ err.LRIDType }}</span>
+                                                            </div>
+
+                                                            <div class="form-group col-md-8 m-t-20"> 
+                                                            <FloatingLabel
+                                                                :config="{label: 'Numero de identificación', hasError: err.LRLastNames }">
+                                                                <input name="LRIdentification" v-model="legalRepresentative.number_id" type="text" @keyup="validateStep2()">
+                                                            </FloatingLabel>
+                                                            <span v-if="err.LRIdentification" class="text-danger" >{{ err.LRIdentification }}</span>
+                                                            </div>
+
+                                                            <div class="form-group col-md-12 m-t-20">
+                                                            <label class="text-muted">Ciudad de expedicion del documento</label>
+                                                                <select class="form-control" v-model="legalRepresentative.expedition_city_id" @keyup="validateStep2()">
+                                                                    <option v-for="city in cities" :key="city.id" :value="city.id">{{city.city}}</option>
+                                                                </select>
+                                                            <span v-if="err.LRExpCityID" class="text-danger" >{{ err.LRExpCityID }}</span>
+                                                            </div>
+
+                                                            <div class="form-group col-md-12 m-t-20">
+                                                            <FloatingLabel
+                                                                :config="{label: 'Nacionalidad', hasError: err.LRNationality }">
+                                                                <input name="LRNationality" v-model="legalRepresentative.nationality" type="text">
+                                                            </FloatingLabel>
+                                                            <span v-if="err.LRNationality" class="text-danger" >{{ err.LRNationality }}</span>
+                                                            </div>
+
+                                                            <div class="form-group col-md-12 m-t-20">
+                                                            <FloatingLabel
+                                                                :config="{label: 'Profesion', hasError: err.LRProfession }">
+                                                                <input name="LRProfession" v-model="legalRepresentative.profession" type="text">
+                                                            </FloatingLabel>
+                                                            <span v-if="err.LRProfession" class="text-danger" >{{ err.LRProfession }}</span>
+                                                            </div>
+
+                                                            <div class="form-group col-md-12 m-t-20">
+                                                            <FloatingLabel
+                                                                :config="{label: 'Telefono', hasError: err.LRPhoneNumber }">
+                                                                <input name="LRPhoneNumber" v-model="legalRepresentative.phone_number" type="text">
+                                                            </FloatingLabel>
+                                                            <span v-if="err.LRPhoneNumber" class="text-danger" >{{ err.LRPhoneNumber }}</span>
+                                                            </div>
+
+                                                            <div class="form-group col-md-12 m-t-20">
+                                                            <FloatingLabel
+                                                                :config="{label: 'Celular', hasError: err.LRCellphone }">
+                                                                <input name="cellphone" v-model="legalRepresentative.cellphone" type="text">
+                                                            </FloatingLabel>
+                                                            <span v-if="err.LRCellphone" class="text-danger" >{{ err.LRCellphone }}</span>
+                                                            </div>
+
+                                                            <div class="form-group col-md-12 m-t-20">
+                                                            <FloatingLabel
+                                                                :config="{label: 'Em@il', hasError: err.LRMail }">
+                                                                <input name="mail" v-model="legalRepresentative.mail" type="mail" @keyup="validateStep2()">
+                                                            </FloatingLabel>
+                                                            <span v-if="err.LRMail" class="text-danger" >{{ err.LRMail }}</span>
+                                                            </div>
+
+
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.bs_name }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="acronym" class="col-sm-3 control-label">Siglas</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-building-o"></i></span></div>
-                                                <input type="text" class="form-control" id="acronym" v-model="company.acronym" placeholder="Siglas o nombre corto">
+                                            <hr>
+                                            <div class="sl-item">
+                                                <div class="sl-left"> <button data-toggle="collapse" data-target="#multiCollapseExample3" aria-expanded="false" aria-controls="multiCollapseExample3 multiCollapseExample3" type="button" :class="[step3 === 'success' ? classSuccess : step3 === 'error' ? classDanger : classNorm]"> 3 </button> </div>
+                                                <div class="sl-right">
+                                                    <div><h4><strong>Domicilio principal</strong></h4> 
+                                                        <div class="m-t-20 row">
+                                                            <div class="collapse multi-collapse" id="multiCollapseExample3">
+                                                                <div class="form-group col-md-12 m-t-20">
+                                                                    <span>Asigne una direccion usando el panel normalizador de direcciones</span>
+                                                                <address-gen :data="company.address" @upAddress="setUpAddress" @upAddressDig="setUpAddressDig" @toReset="setReset" ></address-gen>
+                                                                </div>
+
+                                                                <div class="form-group col-md-12 m-t-20">
+                                                                    <span>Seleccione la ciudad</span>
+                                                                    <v-select id="eventTypeSelect" :options="cities" v-model="company.id_city"  label="city">
+                                                                        <template slot="option" slot-scope="option">
+                                                                            {{ option.city }}
+                                                                        </template>
+                                                                    </v-select>  
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.acronym }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="nit" class="col-sm-3 control-label">NIT</label>
-                                        <div class="col-sm-7">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-qrcode"></i></span></div>
-                                                <input type="number" class="form-control" id="nit" v-model="company.nit">    
-                                            </div>  
-                                        </div>
-                                        <div class="col-sm-2">
-                                                <input type="number" class="form-control" id="verification_digit" v-model="company.verification_digit">
-                                        </div>
-                                         <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.nit }}</span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="web" class="col-sm-3 control-label">WEB</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i class="ti-world"></i></span></div>
-                                                <input type="text" class="form-control" id="web" v-model="company.web" placeholder="www.empresaejemplo.com">
-                                            </div>
-                                            <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.web }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="email" class="col-sm-3 control-label">Mail Corporativo</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i class="ti ti-email"></i></span></div>
-                                                <input type="text" class="form-control" id="email" v-model="company.email" placeholder="info@empresaejemplo.com">
-                                            </div>
-                                            <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.email }}</span>
-                                        </div>
-                                    </div>
-                                    <!-- <div class="form-group row"> -->
-                                         <label for="adderess" class="col-sm-3 control-label">Direccion</label>
-                                        <div class="jumbotron">
-                                       
-                                        <!-- <div class="col-sm-9">
-                                            <div class="input-group"> -->
-                                                <!-- <div class="input-group-prepend"><span class="input-group-text"><i class="ti-lock"></i></span></div> -->
-                                                <address-gen :data="company.address" @upAddress="setUpAddress" @upAddressDig="setUpAddressDig" @toReset="setReset" ></address-gen>
-                                            <!-- </div>
-                                        </div> -->
-                                        <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.address }}</span>
-                                        </div>
-                                    <!-- </div> -->
-                                    <div class="form-group row">
-                                        <label for="city" class="col-sm-3 control-label">Ciudad</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-fort-awesome"></i></span></div>
-                                                    <v-select class="form-control" id="city" :options="cities" v-model="company.city"  label="city">
-                                                        <template slot="option" slot-scope="option">
-                                                            {{ option.city }}
-                                                        </template>
-                                                    </v-select>
-                                            </div>
-                                            <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.id_city }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="phone1" class="col-sm-3 control-label">Telefono</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-phone-square"></i></span></div>
-                                                <input type="text" class="form-control" id="phone1" v-model="company.phone1" placeholder="Telefono principal">
-                                            </div>
-                                            <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.phone1 }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="phone2" class="col-sm-3 control-label">Telefono contacto corporativo</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-phone"></i></span></div>
-                                                <input type="text" class="form-control" id="phone2" v-model="company.phone2" placeholder="Telefono contacto o sucursal">
-                                            </div>
-                                            <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.phone2 }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="phone3" class="col-sm-3 control-label">Celular</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-mobile"></i></span></div>
-                                                <input type="text" class="form-control" id="phone3" v-model="company.phone3" placeholder="Celular de contacto">
-                                            </div>
-                                            <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.phone3 }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="phone2" class="col-sm-3 control-label">Tipo de empresa</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-retweet"></i></span></div>
-                                                    <v-select class="form-control" :options="cmpTypes" v-model="company.companyTypes"  label="company_type">
-                                                        <template slot="option" slot-scope="option">
-                                                            {{ option.company_type }}
-                                                        </template>
-                                                    </v-select>
-                                                <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.id_cmp_type }}</span>
+                                            <hr>
+                                            <div class="sl-item">
+                                                <div class="sl-left"> <img src="" alt="user" class="img-circle" /> </div>
+                                                <div class="sl-right">
+                                                    <div><a href="javascript:void(0)" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
+                                                        <blockquote class="m-t-10">
+                                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+                                                        </blockquote>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                         <button type="submit" class="btn btn-primary">Crear</button>
-                                    </form>
-                                
-                            </div> 
-                        </div>
-                    </div>
-        </div>
-               <div class="modal-footer">
-                                                
-                                            </div>
-                                        </div>
-                                        <!-- /.modal-content -->
-                                    </div>
-                                    <!-- /.modal-dialog -->
                                 </div>
+                                <!--second tab-->
+                                <div class="tab-pane" id="profile" role="tabpanel">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong>Full Name</strong>
+                                                <br>
+                                                <p class="text-muted">Johnathan Deo</p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong>Mobile</strong>
+                                                <br>
+                                                <p class="text-muted">(123) 456 7890</p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong>Email</strong>
+                                                <br>
+                                                <p class="text-muted">johnathan@admin.com</p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6"> <strong>Location</strong>
+                                                <br>
+                                                <p class="text-muted">London</p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <p class="m-t-30">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries </p>
+                                        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                        <h4 class="font-medium m-t-30">Skill Set</h4>
+                                        <hr>
+                                        <h5 class="m-t-30">Wordpress <span class="pull-right">80%</span></h5>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:80%; height:6px;"> <span class="sr-only">50% Complete</span> </div>
+                                        </div>
+                                        <h5 class="m-t-30">HTML 5 <span class="pull-right">90%</span></h5>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-info" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width:90%; height:6px;"> <span class="sr-only">50% Complete</span> </div>
+                                        </div>
+                                        <h5 class="m-t-30">jQuery <span class="pull-right">50%</span></h5>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%; height:6px;"> <span class="sr-only">50% Complete</span> </div>
+                                        </div>
+                                        <h5 class="m-t-30">Photoshop <span class="pull-right">70%</span></h5>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%; height:6px;"> <span class="sr-only">50% Complete</span> </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="settings" role="tabpanel">
+                                    <div class="card-body">
+                                        <form class="form-horizontal form-material">
+                                            <div class="form-group">
+                                                <label class="col-md-12">Full Name</label>
+                                                <div class="col-md-12">
+                                                    <input type="text" placeholder="Johnathan Doe" class="form-control form-control-line">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="example-email" class="col-md-12">Email</label>
+                                                <div class="col-md-12">
+                                                    <input type="email" placeholder="johnathan@admin.com" class="form-control form-control-line" name="example-email" id="example-email">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-12">Password</label>
+                                                <div class="col-md-12">
+                                                    <input type="password" value="password" class="form-control form-control-line">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-12">Phone No</label>
+                                                <div class="col-md-12">
+                                                    <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-12">Message</label>
+                                                <div class="col-md-12">
+                                                    <textarea rows="5" class="form-control form-control-line"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-12">Select Country</label>
+                                                <div class="col-sm-12">
+                                                    <select class="form-control form-control-line">
+                                                        <option>London</option>
+                                                        <option>India</option>
+                                                        <option>Usa</option>
+                                                        <option>Canada</option>
+                                                        <option>Thailand</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <button class="btn btn-success">Update Profile</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                </div>
+                <!-- Row -->
+                
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     <!-- /.modal -->
 </div>
 </template>
 <script>
 
 import addressGen from './Address-gen'
+import ProgressComp from './New-affiliation-comps/progress-comp'
+
+import {FormWizard, TabContent} from 'vue-form-wizard'//imports form wizzard
+import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+import FloatingLabel from 'vue-simple-floating-labels'
 
 export default {
+    props: ['companies'],
     components: {
-        addressGen
+        addressGen,
+        FormWizard,
+        TabContent,
+        FloatingLabel,
+        ProgressComp
     },
     data () {
         return {
@@ -229,24 +391,58 @@ export default {
                 phone3:               '',
                 web:                  '',
             },
+            legalRepresentative:    {
+                names:                  '',
+                last_names:             '',
+                type_id_id:             '',
+                number_id:              '',
+                expedition_city_id:     '',
+                nationality:            '',
+                profession:             '',
+                phone_number:           '',
+                cellphone:              '',
+                mail:                   '',
+            },
+            err: {
+                nit:            '',
+                bs_name:        '',
+                LRNames:        '',
+                LRLastNames:    '',   
+                LRTypeID:       '',
+                LRNumberID:     '',
+                LRExpCityID:    '', 
+                LRMail:         '',
+            },
             imageData:          null,
             logoChanged:        false,
             cities:             [],
             cmpTypes:           [],
             cmpStates:          [],
+            idTypes:            [],
             changes:            [],
-            companies:          [],
             nulledCompanies:    [],
             cmpsByStat:         [],
             count:              [],
             errors:             [],
             cmpStatSel:         null,
-            responseTest:       []
+            responseTest:       [],
+            classNorm:          'btn btn-secondary btn-circle',
+            classDanger:        'btn btn-danger btn-circle',
+            classSuccess:       'btn btn-success btn-circle',
+            step1:              '',
+            step2:              '',
+            step3:              '',
+            step4:              '',
+            step5:              '',
+            step6:              '',
+            per:                0
+
         }
     },
     created : function (){
         this.getCompanyTypes()
         this.getCities()
+        this.getIdTypes()
         this.$bus.$on('get-company-types', () => {
             this.getCompanyTypes()
         })
@@ -266,6 +462,14 @@ export default {
             let url = '/api/get-company-types'; //get the company types
             axios.get(url).then(response =>{
                 this.cmpTypes = response.data
+            }).catch(error => {
+                this.errors = error.response.data
+            });
+        },
+        getIdTypes : function() {
+            let url = 'get-id-types'; //get the company types
+            axios.get(url).then(response =>{
+                this.idTypes = response.data
             }).catch(error => {
                 this.errors = error.response.data
             });
@@ -305,8 +509,8 @@ export default {
                 this.errors =                      [],
                 $('#newAffiliationModal').modal('hide')
             }).catch(error => {
-                console.log(error)
                 this.errors = error.response.data;
+                console.log(this.errors)
             });
         },
         getLogoUpdate : function (e) {
@@ -353,6 +557,80 @@ export default {
         //(Address-gen) this function reset or erase the charset or adress that gives the object
         this.company.address = ''
         },
+        findNit : function (nit){
+            return this.companies.find(company => company.nit === nit)
+        },
+        validateBsName : function (){
+            if(this.company.bs_name){
+                this.err.bs_name = ''
+                return true
+            } else {
+                this.err.bs_name = 'debe asignar la razon social de la empresa'
+                return false
+            }
+        },
+        validateNit : function() {
+            let cmpTmp = []
+        if(this.company.nit.length != 9){
+             this.err.nit = 'El nit debe contener 9 caracteres'
+             return false
+         }else{
+              this.err.nit = ''; this.step1 = ''
+         }
+        if(this.err.nit === ''){
+          if(this.findNit(this.company.nit)){
+              cmpTmp = this.findNit(this.company.nit)
+              this.err.nit = `Este NIT pertenece a la empresa ${cmpTmp.bs_name} y su afiliacion se encuentra en el estado: ${cmpTmp.company_state}`
+              this.step1 = 'error'
+          }else {
+                this.step1 = ''
+                return true
+            }} else {
+                this.step1 = ''
+                return true
+          }
+        },
+        validateStep1 : function() {
+            let bsNameField = this.validateBsName()
+            let nitField = this.validateNit()
+            console.log(`the bs name ${bsNameField}  and the nit field ${nitField}`)
+            bsNameField && nitField ? this.step1 = 'success' : this.step1 = 'error'
+        },
+        validateRPNames : function () {
+            if(this.legalRepresentative.names){this.err.LRNames =  ''; return true}else{this.err.LRNames = 'Debe ingresar los nombres del representante legal'; return false}
+        },
+        validateRPLastNames : function (){
+            if(this.legalRepresentative.last_names){this.err.LRLastNames = ''; return true}else{this.err.LRLastNames = 'Debe ingresar los apellidos del representante legal'; return false}
+        },
+        validateRPTI : function (){
+            if(this.legalRepresentative.type_id_id){this.err.LRTypeID = ''; return true}else{this.err.LRTypeID = 'Debe seleccionar el tipo de identificaion'; return false}
+        },
+        validateNumberID : function (){
+            if(this.legalRepresentative.number_id){this.err.LRNumberID = ''; return true}else{this.err.LRNumberID = 'Debe ingresar numero de udentificacion del representante legal'; return false}
+        },
+        validateRPcity : function () {
+            if(this.legalRepresentative.expedition_city_id){this.err.LRExpCityID = ''; return true}else{this.err.LRExpCityID = 'Debe seleccionar la ciudad de expedicion del documento'; return false}
+        },
+        validateRPMail : function(){
+            if(this.legalRepresentative.mail){this.err.LRMail = ''; return true}else{this.err.LRMail = 'Debe ingresar el correo del representante legal'; return false}
+        },
+        validateStep2 : function() {
+            let RPNames = this.validateRPNames()
+            let RPLastNames = this.validateRPLastNames()
+            let RPTI = this.validateRPTI()
+            let RPNumberID = this.validateNumberID()
+            let RPCity = this.validateRPcity()
+            let RPMail = this.validateRPMail()
+            console.log(`the rpnames ${RPNames} the rplasnames ${RPLastNames} the rpti ${RPTI} the rpnumberid ${RPNumberID} the rpcity ${RPCity} the rpmail ${RPMail}`)
+            if(RPNames && RPLastNames && RPTI && RPNumberID && RPCity && RPMail){
+                this.step2 = 'success'
+            }else{
+                this.step2 = 'error'
+            }
+        },
+        vaidateStep3 : function() {
+            //let
+        }
     }
 }
 </script>

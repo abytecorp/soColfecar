@@ -19,7 +19,7 @@ class CreateAssistantsTable extends Migration
             $table->string('last_names');
             $table->integer('id_type')->nullable()->unsigned();
             $table->string('id_number')->nullable();
-            $table->integer('id_city')->unsigned()-nullable();
+            $table->integer('id_city')->unsigned()->nullable();
             $table->string('address')->nullable();
             $table->string('position')->nullable();
             $table->string('email')->unique();

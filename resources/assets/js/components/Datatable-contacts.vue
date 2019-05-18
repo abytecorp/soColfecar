@@ -101,7 +101,7 @@ export default {
             type: 'warning'
           },
           handler: row => {
-              //this.$emit('updateAlimentsModal', row.record_id)
+              this.$bus.$emit('set-active-inactive-contact-in-contacts-manage', row.id, row.id_status,row.id_company)
           },
           //label: 'Contactos'
           icon: 'fa fa-check-square-o'

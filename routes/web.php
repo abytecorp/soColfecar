@@ -70,6 +70,7 @@ Route::middleware(['auth'])->group(function(){
         Route::get('affiliations/company/{id_cmp_state}', 'AffiliationsController@getCompanies')->name('affiliations-getCompanies');
         Route::get('affiliations/get-companies', 'AffiliationsController@getCompaniesApi');
         Route::get('affiliations/companies-by-state/{state_company}', 'AffiliationsController@getCompaniesByState');
+        Route::get('affiliations/events-by-type/{event_type}', 'AffiliationsController@getEventsByType');
         Route::get('affiliations/get-company-state/{state}', 'AffiliationsController@getCompanyState');
         Route::post('company-state/store', 'AffiliationsController@storeCompanyState');
         Route::put('company-state/{state}','AffiliationsController@stateUpdate');
@@ -78,6 +79,7 @@ Route::middleware(['auth'])->group(function(){
         Route::post('company-type/store', 'AffiliationsController@storeCompanyType');
         Route::put('company-type/{type}','AffiliationsController@typeUpdate');
         Route::get('affiliations/set-company-type-status/{setvalue}/{id}', 'AffiliationsController@setCompanyTypeStatus');
+        Route::get('affiliations/set-assistant-status/{setvalue}/{id}', 'AffiliationsController@setAssistantStatus');
         Route::get('affiliations/get-all-types', 'AffiliationsController@getAllTypes');
 
 //API
@@ -203,9 +205,6 @@ Route::middleware(['auth'])->group(function(){
         //get assitant by id
         Route::get('/api/get-assistant-by-id/{assistant}','DivulgationController@getAssitantById');
 
-        
-
-
         //register the refiger
         Route::get('/api/{ref}/{ref_mode}/{record}/reg-ref','DivulgationController@setRegRef');
 
@@ -227,6 +226,27 @@ Route::middleware(['auth'])->group(function(){
         //get event Types
         Route::get('/api/get-event-types','EventsController@getEventTypes')->name('get-event-types');
 
+        //get event Type by id
+        Route::get('/api/get-event-type/{event_type}','EventsController@getEventTypeById')->name('get-event-type');
+
+        //get event Types All
+        Route::get('/api/get-event-types-all','EventsController@getEventTypesAll')->name('get-event-types-all');
+
+        //update event type
+        Route::put('event-type/{event_type}','EventsController@eventTypeUpdate');
+
+        //new event type
+        Route::post('event-type/store', 'EventsController@storeEventType');
+
+        //set enable or disable event type
+        Route::get('event-type/set-event-type-status/{setvalue}/{id}', 'EventsController@setEventTypeStatus');
+
+        //get events after current date
+        Route::get('/api/get-events-after/{current_date}','EventsController@getEventsAfter');
+
+        //get places
+        Route::get('/api/get-places','EventsController@getPlaces')->name('get-places');
+
         //new event from API
         Route::resource('/api/events', 'EventsController', ['except' => 'show','create']);
 
@@ -245,6 +265,9 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/api/get-changes-by-user/{user}','ChangesController@getChangesByUser');
         //get company types to API
         Route::get('/api/get-company-types','CompanyTypeController@getCompanyTypes');
+
+        //create place
+        Route::post('/api/places/store','EventsController@placesStore');
 
     //Chapters
     Route::post('chapter/store', 'ChapterController@store')->name('chapter.store');
@@ -432,6 +455,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('id_types/{id_type}/edit', 'IdTypeController@edit')->name('id_types.edit')
             ->middleware('permission_sh:id_types.edit');
 
+        Route::get('get-id-types','IdTypeController@getIdTypes');
+
  
                 //events
     Route::post('events/store', 'EventsController@store')->name('events.store')
@@ -469,12 +494,6 @@ Route::middleware(['auth'])->group(function(){
    Route::get('revision/{event}', 'DivulgationController@eventDataTable')->name('review-evento.show')
             ->middleware('permission_sh:review-evento.show');
     
-  
-
-
-
-
-
     //Argumentacion Gremial
     Route::get('guild-argumentation', 'GuildArgumentationController@index')->name('guild-argumentation.index')
             ->middleware('permission_sh:guild-argumentation.index');

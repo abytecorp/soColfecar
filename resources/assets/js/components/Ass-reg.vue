@@ -1115,7 +1115,7 @@ Vue.use(VueCurrencyFilter,{
   fractionCount: 2, // ¿Cuántos decimales mostrar?
   fractionSeparator: '.', // Separador de decimales
   symbolPosition: 'front', // Posición del símbolo. Puede ser al inicio ('front') o al final ('') es decir, si queremos que sea al final, en lugar de front ponemos una cadena vacía ''
-  symbolSpacing: true // Indica si debe poner un espacio entre el símbolo y la cantidad
+  symbolSpacing: false // Indica si debe poner un espacio entre el símbolo y la cantidad
 
 })
 export default {

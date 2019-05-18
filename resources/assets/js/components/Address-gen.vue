@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="input-group mb-3">
+        <div class="input-group mb-6">
             <!-- <a href="#" @click="reset"><div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="ti-trash"></i></span>
             </div></a> -->
@@ -11,8 +11,8 @@
         </div>
         
         <div v-if="isEdit == true"><div class="row">
-            <div class="col-md-4">
-                <h5 class="m-t-30 m-b-10">Nomenclaturas</h5>
+            <div class="col-md-6">
+                <h8 class="m-t-30 m-b-10">Nomenclaturas</h8>
             <v-select :options="nomenclatures" @input="setValueNom" label="nomenclature">
                 <template slot="option" slot-scope="option">
                     {{ option.nomenclature }}
@@ -20,7 +20,7 @@
             </v-select>
             </div>
             <div class="col-md-4">
-                <h5 class="m-t-30 m-b-10">Digitos</h5>
+                <h8 class="m-t-30 m-b-10">Digitos</h8>
             <v-select :options="digits" @input="setValueDig" label="digit">
                 <template slot="option" slot-scope="option">
                     {{ option.digit }}
@@ -28,7 +28,7 @@
             </v-select>
             </div>
             <div class="col-md-4">
-                <h5 class="m-t-30">Letras</h5>
+                <h8 class="m-t-30">Letras</h8>
             <v-select :options="add_letters" @input="setValueLet" label="add_letter">
                 <template slot="option" slot-scope="option">
                     {{ option.add_letter }}
@@ -48,7 +48,7 @@
             <hr>
             <div class="input-group mb-3">
                 
-                <input type="text" class="form-control"  aria-label="Username"  aria-describedby="basic-addon1"  v-model="nom_name">
+                <input type="text" class="form-control" ref="input-name" placeholder="Ingrese la descripción" v-model="nom_name">
                 <button type="button" class="btn btn-success" @click="addName"><i class="fa fa-pencil"></i> Agregar </button>
                
             </div>
@@ -133,6 +133,7 @@ export default {
         },
         toAddName : function (val) {
             if(val){
+                //this.$refs.input-name.$el.focus()
                 this.rsp_named = this.rsp_named == false ? true : false
             }else{
                 this.$emit('upAddress',this.nom_named)

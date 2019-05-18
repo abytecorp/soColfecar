@@ -106,4 +106,11 @@ class IdTypeController extends Controller
     {
 //
     }
+    public function getIdTypes()
+    {
+        $id_types = Id_type::select('id_types.id','id_types.id_type','id_types.id_status')
+            ->where('id_types.id_status','=',1)
+            ->get();
+        return $id_types;
+    }
 }

@@ -17,6 +17,8 @@ use soColfecar\Company;
 use soColfecar\Event_type;
 use soColfecar\Item;
 use soColfecar\Icon;
+use soColfecar\Assistant;
+use soColfecar\Event;
 use Auth;
 
 class AffiliationsController extends Controller
@@ -194,7 +196,13 @@ class AffiliationsController extends Controller
     }
     public function getCompaniesApi()
     {
-        $companies = Company::all();
+        $companies = Company::select('companies.id AS company_id','companies.bs_name','companies.acronym','companies.nit','companies.verification_digit',
+        'companies.id_company_type','companies.web','companies.email','companies.address','companies.logo','companies.phone1',
+        'companies.phone2','companies.phone3','companies.id_cmp_state','companies.id_status','companies.id_city','cities.city',
+        'cities.id AS city_id', 'company_states.company_state')
+        ->join('cities','companies.id_city','cities.id')
+        ->join('company_states','companies.id_cmp_state', 'company_states.id')
+        ->get();
         return $companies;
     }
     public function getCompaniesByState($request)
@@ -320,5 +328,31 @@ class AffiliationsController extends Controller
     {
         $company_types = Company_type::all();
         return $company_types;
+    }
+    public function setAssistantStatus($setvalue,$id)
+    {
+        $assistant = Assistant::where('id',$id)->first();
+        $assistant['id_status'] = $setvalue;
+        $assistant->update();
+        if($setvalue == 1){
+        Change::create([
+            'description' => 'Activo el asistente con id  ['.$assistant['id'].']',
+            'id_user' => Auth::user()->id,
+            'id_item' => 7
+        ]);
+        }else{
+            Change::create([
+                'description' => 'Inhabilito el asistente con id  ['.$assistant['id'].']',
+                'id_user' => Auth::user()->id,
+                'id_item' => 7
+            ]);
+        }
+        return;
+    }
+    public function getEventsByType($request)
+    {
+        $events = Event::where('id_event_type',$request)
+            ->get();
+        return $events;
     }
 }

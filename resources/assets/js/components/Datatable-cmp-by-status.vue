@@ -133,6 +133,15 @@
                       </v-select>
                       <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.id_city }}</span>
                     </div>
+                    <div class="form-group m-form__group">
+                      <label for="bsNameInput">Estado de afiliacion:</label>
+                      <v-select :options="cmpStates"  v-model="companyUpdate.id_cmp_state" @change="delVar" label="company_state">
+                          <template slot="option" slot-scope="option">
+                              {{ option.company_state }}
+                          </template>
+                      </v-select>
+                      <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.id_cmp_state }}</span>
+                    </div>
                     <hr>
                    
                     <button type="submit" class="btn btn-primary">Actualizar</button>
@@ -206,6 +215,7 @@ export default {
       imageData:              null,//preview form image
       logoChanged:            false,
       cities:                 [],
+      cmpStates:               [],               
       errors:                 [],
       isContactSelected:      null,
       titles: [{prop:'bs_name',label:'Razon Social',key:'bs_name'},{prop:'email',label:'Em@il',key:'email'},{prop:'nit',label:'NIT',key:'nit'}],
@@ -243,6 +253,7 @@ export default {
   },
   created: function() {
     this.getCities()
+    this.getCmpState()
     this.$bus.$on('set-null-isContactSelected', (val) => {
       this.showContactsTable(val)
     })
@@ -257,6 +268,14 @@ export default {
     },
     handleSelectionChange : function () {
 
+    },
+    getCmpState : function() {
+            var urlCmpState = 'affiliations/estados';
+            axios.get(urlCmpState).then(response =>{
+                this.cmpStates = response.data
+            }).catch(error => {
+                this.errors = error.response.data
+            });
     },
     getLogoUpdate : function (e) {
       var fileReader = new FileReader()

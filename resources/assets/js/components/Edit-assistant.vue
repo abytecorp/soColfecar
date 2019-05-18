@@ -13,7 +13,7 @@
                         </div>
                         <div class="form-group">
                             <label for="last_namesInput">Identificacion</label>
-                            <input type="text" class="form-control" name="last_namesInput" v-model="assistant.id_number" placeholder="Numero de identificacion">
+                            <input type="number" class="form-control" name="last_namesInput" v-model="assistant.id_number" placeholder="Numero de identificacion">
                             <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.id_number }}</span>
                         </div>
                         <div class="form-group m-form__group">

@@ -27,17 +27,21 @@
 
 //select 2
 @import '../assets/node_modules/bootstrap-datepicker/bootstrap-datepicker.min.css';
-@import '../assets/node_modules/select2/dist/css/select2.min.css';
+
+// @import '../assets/node_modules/select2/dist/css/select2.min.css';
+
 @import '../assets/node_modules/switchery/dist/switchery.min.css';
-@import '../assets/node_modules/bootstrap-select/bootstrap-select.min.css';
+
+// @import '../assets/node_modules/bootstrap-select/bootstrap-select.min.css';
+// @import '../assets/node_modules/bootstrap-table/dist/bootstrap-table.min.css';
+
 @import '../assets/node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css';
 @import '../assets/node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css';
 @import '../dist/css/pages/user-card.css';
 @import '../dist/css/pages/ribbon-page.css';
 @import '../dist/css/pages/tab-page.css';
+@import '../assets/node_modules/css-chart/css-chart.css';
 
-
-@import '../dist/css/pages/floating-label.css';
 
 
 .navbar-laravel {

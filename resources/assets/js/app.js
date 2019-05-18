@@ -26,11 +26,11 @@ require('../assets/node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min
 require('../assets/node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.js');
 require('../assets/node_modules/multiselect/js/jquery.multi-select.js');
 require('../dist/js/form-addons.js');
-require('../assets/node_modules/Magnific-Popup-master/dist/jquery.magnific-popup.min.js');
-require('../assets/node_modules/Magnific-Popup-master/dist/jquery.magnific-popup-init.js');
-require('../assets/node_modules/sparkline/jquery.sparkline.min.js');
-// require('../assets/node_modules/sticky-kit-master/dist/sticky-kit.min.js');
-
+// require('../assets/node_modules/Magnific-Popup-master/dist/jquery.magnific-popup.min.js');
+// require('../assets/node_modules/Magnific-Popup-master/dist/jquery.magnific-popup-init.js');
+// require('../assets/node_modules/sparkline/jquery.sparkline.min.js');
+// require('../assets/node_modules/bootstrap-table/dist/bootstrap-table.min.js');
+// require('../assets/node_modules/bootstrap-table/dist/bootstrap-table.ints.js');
 
 // require( 'datatables.net' )
 
