@@ -12,7 +12,7 @@
         
         <div v-if="isEdit == true"><div class="row">
             <div class="col-md-6">
-                <h8 class="m-t-30 m-b-10">Nomenclaturas</h8>
+                <h6 class="m-t-30 m-b-10">Nomenclaturas</h6>
             <v-select :options="nomenclatures" @input="setValueNom" label="nomenclature">
                 <template slot="option" slot-scope="option">
                     {{ option.nomenclature }}
@@ -20,7 +20,7 @@
             </v-select>
             </div>
             <div class="col-md-4">
-                <h8 class="m-t-30 m-b-10">Digitos</h8>
+                <h6 class="m-t-30 m-b-10">Digitos</h6>
             <v-select :options="digits" @input="setValueDig" label="digit">
                 <template slot="option" slot-scope="option">
                     {{ option.digit }}
@@ -28,7 +28,7 @@
             </v-select>
             </div>
             <div class="col-md-4">
-                <h8 class="m-t-30">Letras</h8>
+                <h6 class="m-t-30">Letras</h6>
             <v-select :options="add_letters" @input="setValueLet" label="add_letter">
                 <template slot="option" slot-scope="option">
                     {{ option.add_letter }}

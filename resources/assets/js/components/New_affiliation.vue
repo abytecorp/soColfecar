@@ -34,7 +34,7 @@
                             <div>
                                 <hr> </div>
                             <div class="card-body"> <small class="text-muted">Correo Electronico </small>
-                                <h6>{{ company.mail || 'Aun no se asigna correo' }}</h6> <small class="text-muted p-t-30 db">Telefono</small>
+                                <h6>{{ company.email || 'Aun no se asigna correo' }}</h6> <small class="text-muted p-t-30 db">Telefono</small>
                                 <h6>{{ company.phone1 || 'Aun no se asigna telefono' }}</h6> <small class="text-muted p-t-30 db">Direccion</small>
                                 <h6>{{ company.address || 'Un no se asigna direccion' }}</h6>
                                 <div class="map-box">
@@ -53,9 +53,9 @@
                         <div class="card">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs profile-tab" role="tablist">
-                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Timeline</a> </li>
-                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Profile</a> </li>
-                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Settings</a> </li>
+                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Informacion</a> </li>
+                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Sucursales</a> </li>
+                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Documentacion</a> </li>
                             </ul>
                             <!-- Tab panes -->
                             <div class="tab-content">
@@ -72,10 +72,11 @@
                                                         <div class="form-group col-md-12 m-t-20"> 
                                                                 <FloatingLabel
                                                                     :config="{label: 'Razon Social', hasError: err.bs_name, hasClearButton: false }">
-                                                                    <input name="bs_name" v-model="company.bs_name" type="text" @keyup="validateStep1()" @>
+                                                                    <input name="bs_name" v-model="company.bs_name" type="text" @keyup="validateStep1(),progressing()">
                                                                 </FloatingLabel>
                                                                 <span v-if="err.bs_name" class="text-danger" >{{ err.bs_name }}</span>
                                                         </div>
+
                                                         <div class="form-group col-md-12 m-t-20">         
                                                                 <FloatingLabel
                                                                     :config="{label: 'Siglas de la empresa', hasError: false, hasClearButton: false }">
@@ -83,19 +84,51 @@
                                                                 </FloatingLabel>
                                                         </div>
                                                                 
-                                                    <div class="form-group col-md-8 m-t-20">            
+                                                        <div class="form-group col-md-8 m-t-20">            
+                                                                    <FloatingLabel
+                                                                        :config="{label: 'NIT', hasError: err.nit, hasClearButton: false }">
+                                                                        <input name="nit" v-model="company.nit" type="number" @keyup="validateNit(),validateStep1(),progressing()" @onblur="validateNit(),validateStep1(),progressing()">
+                                                                    </FloatingLabel>
+                                                                    <span v-if="err.nit" class="text-danger" >{{ err.nit }}</span>
+                                                        </div> 
+                                                    
+                                                        <div class="form-group col-md-2 m-t-20"> 
+                                                                    <FloatingLabel
+                                                                        :config="{label: 'DV', hasError: false, hasClearButton: false }">
+                                                                        <input name="dv" v-model="company.verification_digit" type="number">
+                                                                    </FloatingLabel>
+                                                        </div>
+
+                                                        <div class="form-group col-md-12 m-t-20">         
                                                                 <FloatingLabel
-                                                                    :config="{label: 'NIT', hasError: err.nit, hasClearButton: false }">
-                                                                    <input name="nit" v-model="company.nit" type="number" @keyup="validateNit(),validateStep1()" @onblur="validateNit(),validateStep1()">
+                                                                    :config="{label: 'Correo electronico principal', hasError: err.principalMail, hasClearButton: false }">
+                                                                    <input name="email" v-model="company.email" type="mail" @keyup="validateStep1(),progressing()">
                                                                 </FloatingLabel>
-                                                                <span v-if="err.nit" class="text-danger" >{{ err.nit }}</span>
-                                                    </div> 
-                                                    <div class="form-group col-md-2 m-t-20"> 
+                                                                <span v-if="err.principalMail" class="text-danger" >{{ err.principalMail }}</span>
+                                                        </div>
+
+                                                        <div class="form-group col-md-12 m-t-20">         
                                                                 <FloatingLabel
-                                                                    :config="{label: 'DV', hasError: false, hasClearButton: false }">
-                                                                    <input name="dv" v-model="company.verification_digit" type="number">
+                                                                    :config="{label: 'Telefono oficina principal', hasError: err.principalPhone, hasClearButton: false }">
+                                                                    <input name="phone1" v-model="company.phone1" type="text" @keyup="validateStep1(),progressing()">
                                                                 </FloatingLabel>
-                                                    </div>       
+                                                                <span v-if="err.principalPhone" class="text-danger" >{{ err.principalPhone }}</span>
+                                                        </div>
+
+                                                        <div class="form-group col-md-12 m-t-20">         
+                                                                <FloatingLabel
+                                                                    :config="{label: 'Telefono opcional', hasError: false, hasClearButton: false }">
+                                                                    <input name="phone2" v-model="company.phone2" type="text">
+                                                                </FloatingLabel>
+                                                        </div>
+
+                                                        <div class="form-group col-md-12 m-t-20">         
+                                                                <FloatingLabel
+                                                                    :config="{label: 'Celular', hasError: false, hasClearButton: false }">
+                                                                    <input name="phone3" v-model="company.phone3" type="text">
+                                                                </FloatingLabel>
+                                                        </div>
+
                                                     </form>
                                                     </div>
                                                     </div>
@@ -111,7 +144,7 @@
                                                             <div class="form-group col-md-12 m-t-20">
                                                             <FloatingLabel
                                                                 :config="{label: 'Nombres del representante legal', hasError: err.LRNames }">
-                                                                <input name="LRNames" v-model="legalRepresentative.names" type="text" @keyup="validateStep2()">
+                                                                <input name="LRNames" v-model="legalRepresentative.names" type="text" @keyup="validateStep2(),progressing()">
                                                             </FloatingLabel>
                                                             <span v-if="err.LRNames" class="text-danger" >{{ err.LRNames }}</span>
                                                             </div>
@@ -119,7 +152,7 @@
                                                             <div class="form-group col-md-12 m-t-20">
                                                             <FloatingLabel
                                                                 :config="{label: 'Apellidos del representante legal', hasError: err.LRLastNames }">
-                                                                <input name="LRLastNames" v-model="legalRepresentative.last_names" type="text" @keyup="validateStep2()">
+                                                                <input name="LRLastNames" v-model="legalRepresentative.last_names" type="text" @keyup="validateStep2(),progressing()">
                                                             </FloatingLabel>
                                                             <span v-if="err.LRLastNames" class="text-danger" >{{ err.LRLastNames }}</span>
                                                             </div>
@@ -131,20 +164,20 @@
                                                                     <option v-for="idType in idTypes" :key="idType.id" :value="idType.id">{{idType.id_type}}</option>
                                                                 </select>
                                                             </div>
-                                                            <span v-if="err.LRIDType" class="text-danger" >{{ err.LRIDType }}</span>
+                                                            <span v-if="err.LRTypeID" class="text-danger" >{{ err.LRTypeID }}</span>
                                                             </div>
 
                                                             <div class="form-group col-md-8 m-t-20"> 
                                                             <FloatingLabel
-                                                                :config="{label: 'Numero de identificación', hasError: err.LRLastNames }">
-                                                                <input name="LRIdentification" v-model="legalRepresentative.number_id" type="text" @keyup="validateStep2()">
+                                                                :config="{label: 'Numero de identificación', hasError: err.LRIdentification }">
+                                                                <input name="LRIdentification" v-model="legalRepresentative.number_id" type="text" @keyup="validateStep2(),progressing()">
                                                             </FloatingLabel>
                                                             <span v-if="err.LRIdentification" class="text-danger" >{{ err.LRIdentification }}</span>
                                                             </div>
 
                                                             <div class="form-group col-md-12 m-t-20">
                                                             <label class="text-muted">Ciudad de expedicion del documento</label>
-                                                                <select class="form-control" v-model="legalRepresentative.expedition_city_id" @keyup="validateStep2()">
+                                                                <select class="form-control" v-model="legalRepresentative.expedition_city_id" @keyup="validateStep2(),progressing()">
                                                                     <option v-for="city in cities" :key="city.id" :value="city.id">{{city.city}}</option>
                                                                 </select>
                                                             <span v-if="err.LRExpCityID" class="text-danger" >{{ err.LRExpCityID }}</span>
@@ -185,7 +218,7 @@
                                                             <div class="form-group col-md-12 m-t-20">
                                                             <FloatingLabel
                                                                 :config="{label: 'Em@il', hasError: err.LRMail }">
-                                                                <input name="mail" v-model="legalRepresentative.mail" type="mail" @keyup="validateStep2()">
+                                                                <input name="mail" v-model="legalRepresentative.mail" type="mail" @keyup="validateStep2(),progressing()">
                                                             </FloatingLabel>
                                                             <span v-if="err.LRMail" class="text-danger" >{{ err.LRMail }}</span>
                                                             </div>
@@ -201,34 +234,42 @@
                                                 <div class="sl-left"> <button data-toggle="collapse" data-target="#multiCollapseExample3" aria-expanded="false" aria-controls="multiCollapseExample3 multiCollapseExample3" type="button" :class="[step3 === 'success' ? classSuccess : step3 === 'error' ? classDanger : classNorm]"> 3 </button> </div>
                                                 <div class="sl-right">
                                                     <div><h4><strong>Domicilio principal</strong></h4> 
-                                                        <div class="m-t-20 row">
+                                                        
                                                             <div class="collapse multi-collapse" id="multiCollapseExample3">
                                                                 <div class="form-group col-md-12 m-t-20">
                                                                     <span>Asigne una direccion usando el panel normalizador de direcciones</span>
                                                                 <address-gen :data="company.address" @upAddress="setUpAddress" @upAddressDig="setUpAddressDig" @toReset="setReset" ></address-gen>
+                                                                <span v-if="err.address" class="text-danger" >{{ err.address }}</span>
                                                                 </div>
 
                                                                 <div class="form-group col-md-12 m-t-20">
                                                                     <span>Seleccione la ciudad</span>
-                                                                    <v-select id="eventTypeSelect" :options="cities" v-model="company.id_city"  label="city">
+                                                                    <v-select id="eventTypeSelect" :options="cities" v-model="company.id_city"  label="city" @input="validateStep3(),progressing()">
                                                                         <template slot="option" slot-scope="option">
                                                                             {{ option.city }}
                                                                         </template>
-                                                                    </v-select>  
+                                                                    </v-select>
+                                                                    <span v-if="err.city" class="text-danger" >{{ err.city }}</span>
+                                                                </div>
+
+                                                                <div class="form-group col-md-12 m-t-20">
+                                                                    <FloatingLabel
+                                                                        :config="{label: 'Telefonos', hasError: err.LRLastNames }">
+                                                                        <input name="companyPhone" v-model="company.phone" type="text">
+                                                                    </FloatingLabel>
+                                                                    <span v-if="err.phone" class="text-danger" >{{ err.phone }}</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
                                             <hr>
                                             <div class="sl-item">
-                                                <div class="sl-left"> <img src="" alt="user" class="img-circle" /> </div>
+                                                <div class="sl-left"> <button  @click="setSocietyKind()" type="button" :class="[step4 === 'success' ? classSuccess : step4 === 'error' ? classDanger : classNorm]"> 4 </button> </div>
                                                 <div class="sl-right">
-                                                    <div><a href="javascript:void(0)" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
-                                                        <blockquote class="m-t-10">
-                                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-                                                        </blockquote>
+                                                    <div><h4><strong>Clase de sociedad</strong></h4> 
+                                                            <society-kind v-if="isSocietyKind"></society-kind>
                                                     </div>
                                                 </div>
                                             </div>
@@ -355,19 +396,17 @@
 
 import addressGen from './Address-gen'
 import ProgressComp from './New-affiliation-comps/progress-comp'
+import SocietyKind from './New-affiliation-comps/Society-kind'
 
-import {FormWizard, TabContent} from 'vue-form-wizard'//imports form wizzard
-import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import FloatingLabel from 'vue-simple-floating-labels'
 
 export default {
     props: ['companies'],
     components: {
         addressGen,
-        FormWizard,
-        TabContent,
         FloatingLabel,
-        ProgressComp
+        ProgressComp,
+        SocietyKind
     },
     data () {
         return {
@@ -404,15 +443,20 @@ export default {
                 mail:                   '',
             },
             err: {
-                nit:            '',
-                bs_name:        '',
-                LRNames:        '',
-                LRLastNames:    '',   
-                LRTypeID:       '',
-                LRNumberID:     '',
-                LRExpCityID:    '', 
-                LRMail:         '',
+                nit:                  '',
+                bs_name:              '',
+                LRNames:              '',
+                LRLastNames:          '',   
+                LRTypeID:             '',
+                LRIdentification:     '',
+                LRExpCityID:          '', 
+                LRMail:               '',
+                address:              '',
+                city:                 '',
+                principalMail:        '',
+                principalPhone:       ''
             },
+            isSocietyKind:      false,
             imageData:          null,
             logoChanged:        false,
             cities:             [],
@@ -435,7 +479,8 @@ export default {
             step4:              '',
             step5:              '',
             step6:              '',
-            per:                0
+            per:                0,
+            num:                0
 
         }
     },
@@ -457,7 +502,7 @@ export default {
                 this.cities = [];
                 this.errors = error.response.data;
             });
-            },
+        },
         getCompanyTypes : function() {
             let url = '/api/get-company-types'; //get the company types
             axios.get(url).then(response =>{
@@ -510,7 +555,7 @@ export default {
                 $('#newAffiliationModal').modal('hide')
             }).catch(error => {
                 this.errors = error.response.data;
-                console.log(this.errors)
+                //console.log(this.errors)
             });
         },
         getLogoUpdate : function (e) {
@@ -548,14 +593,20 @@ export default {
         setUpAddress : function(val) {
         //(Addres-gen)this function used to add the nomenclature an the letters, whit spaces to build the string
         this.company.address = this.company.address + ' ' + val + ' '
+        this.validateStep3()
+        this.progressing()
         },
         setUpAddressDig : function(val) {
         //(Addless-gen)this function add the string whitout a initial space, this used in the numbers.
         this.company.address = this.company.address + val
+        this.validateStep3()
+        this.progressing()
         },
         setReset : function() {
         //(Address-gen) this function reset or erase the charset or adress that gives the object
         this.company.address = ''
+        this.validateStep3()
+        this.progressing()
         },
         findNit : function (nit){
             return this.companies.find(company => company.nit === nit)
@@ -590,11 +641,45 @@ export default {
                 return true
           }
         },
+        validatePrinMail : function (){
+            if(this.company.email){this.err.principalMail = ''; return true}else{this.err.principalMail = 'Debe ingresar el correo principal de la empresa';return false}
+        },
+        validatePrinPhone : function () {
+            if(this.company.phone1){this.err.principalPhone = ''; return true}else{this.err.principalPhone = 'Debe ingresar el telefono principal de la empresa'; return false}
+        },
+        valUniqueMail : function(){
+            let mail = this.companies.find(company => company.email === this.company.email)
+            //console.log(mail)
+            if(mail && this.company.email){
+                this.err.principalMail = `Este correo ya esta registrado con la empresa ${mail.bs_name}`
+                return false
+            }else{
+                this.err.principalMail = ''
+                return true
+            }
+        },
+        valMailFormat : function(){
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            //console.log(re.test(String(this.company.email).toLowerCase()))
+            if(!re.test(String(this.company.email).toLowerCase()) && this.company.email){
+                this.err.principalMail = 'Debe registrar un correo con el formato correcto >>ejemplo@empresa.com<<'
+                return false
+                }else{
+                    if(!this.err.principalMail){
+                    this.err.principalMail = ''
+                    }
+                    return true
+                   }
+        },
         validateStep1 : function() {
             let bsNameField = this.validateBsName()
             let nitField = this.validateNit()
-            console.log(`the bs name ${bsNameField}  and the nit field ${nitField}`)
-            bsNameField && nitField ? this.step1 = 'success' : this.step1 = 'error'
+            let principalMail = this.validatePrinMail()
+            let uniqueMail = this.valUniqueMail()
+            let mailFormat = this.valMailFormat()
+            let principalPhone = this.validatePrinPhone()
+            //console.log(`bsNameField ${bsNameField} nitField ${nitField} principalMail ${principalMail} principalPhone ${principalPhone} uniqueMail ${uniqueMail} mailFormat ${mailFormat}`)
+            if(bsNameField && nitField && principalMail && principalPhone && uniqueMail && mailFormat){this.step1 = 'success'}else{ this.step1 = 'error'}
         },
         validateRPNames : function () {
             if(this.legalRepresentative.names){this.err.LRNames =  ''; return true}else{this.err.LRNames = 'Debe ingresar los nombres del representante legal'; return false}
@@ -606,7 +691,7 @@ export default {
             if(this.legalRepresentative.type_id_id){this.err.LRTypeID = ''; return true}else{this.err.LRTypeID = 'Debe seleccionar el tipo de identificaion'; return false}
         },
         validateNumberID : function (){
-            if(this.legalRepresentative.number_id){this.err.LRNumberID = ''; return true}else{this.err.LRNumberID = 'Debe ingresar numero de udentificacion del representante legal'; return false}
+            if(this.legalRepresentative.number_id){this.err.LRIdentification = ''; return true}else{this.err.LRIdentification = 'Debe ingresar numero de udentificacion del representante legal'; return false}
         },
         validateRPcity : function () {
             if(this.legalRepresentative.expedition_city_id){this.err.LRExpCityID = ''; return true}else{this.err.LRExpCityID = 'Debe seleccionar la ciudad de expedicion del documento'; return false}
@@ -621,15 +706,39 @@ export default {
             let RPNumberID = this.validateNumberID()
             let RPCity = this.validateRPcity()
             let RPMail = this.validateRPMail()
-            console.log(`the rpnames ${RPNames} the rplasnames ${RPLastNames} the rpti ${RPTI} the rpnumberid ${RPNumberID} the rpcity ${RPCity} the rpmail ${RPMail}`)
+            //console.log(`the rpnames ${RPNames} the rplasnames ${RPLastNames} the rpti ${RPTI} the rpnumberid ${RPNumberID} the rpcity ${RPCity} the rpmail ${RPMail}`)
             if(RPNames && RPLastNames && RPTI && RPNumberID && RPCity && RPMail){
                 this.step2 = 'success'
             }else{
                 this.step2 = 'error'
             }
         },
-        vaidateStep3 : function() {
-            //let
+        validateAddress : function() {
+            if(this.company.address){this.err.address = '';return true}else{this.err.address = 'Debe ingresar la direccion';return false}
+        },
+        validateCity : function() {
+            if(typeof(this.company.id_city) === 'object'){this.err.city = ''; return true}else{this.err.city = 'Debe seleccionar la ciudad'; return false}
+        },
+        validateStep3 : function() {
+            let address = this.validateAddress()
+            let city = this.validateCity()
+            if(address && city){
+                this.step3 = 'success'
+            }else{
+                this.step3 = 'error'
+            }
+        },
+        progressing : function() {
+            
+            let num1 = this.step1 === 'success' ? 1 : 0
+            let num2 = this.step2 === 'success' ? 1 : 0
+            let num3 = this.step3 === 'success' ? 1 : 0
+            let num4 = this.step4 === 'success' ? 1 : 0
+            this.num = num1 + num2 + num3 + num4
+            this.per = 8.333333333333333 * this.num
+        },
+        setSocietyKind : function(){
+            this.isSocietyKind = !this.isSocietyKind
         }
     }
 }

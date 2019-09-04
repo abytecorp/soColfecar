@@ -429,8 +429,6 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
-                                
-                                
                                 <button type="button" v-on:click="setRefMode('AgendaAcademica')" class="btn btn-secondary"> Agenda Academica <i class="fa fa-graduation-cap"></i></button>
                                 
                                 <button type="button" v-on:click="setRefMode('Almuerzodia1')" class="btn btn-primary"><i class="fa fa-cutlery"></i> Almuerzo dia 1</button>
@@ -1085,6 +1083,8 @@
     </div>
 
     <hr>
+<modal-edit-external-assistant v-if="assistantUp.id" :company_id="assistantUp.id_company" :assistant_id="assistantUp.id" @closeEditAssistant="closeEditAssistant" ></modal-edit-external-assistant>
+
 
 </div>           
 </template>
@@ -1102,6 +1102,7 @@ import VueQrcodeReader from 'vue-qrcode-reader';
 Vue.component( 'vue-qrcode-reader', VueQrcodeReader)
 
 import dataTable from './Data-table';
+import modalEditExternalAssistant from './External-inscription/Modal-edit-external-assistant';
 //import updateAssistantmodal from './Updateassistant-modal';
 //Vue.component('update-assistantmodal', updateAssistantmodal)
 
@@ -1121,7 +1122,8 @@ Vue.use(VueCurrencyFilter,{
 export default {
     props: ['event'],
     components: {
-        dataTable
+        dataTable,
+        modalEditExternalAssistant
     },
     data () {
         return {
@@ -1240,6 +1242,7 @@ export default {
                 Cenadia2:       '',
                 Cenadia3:       '',
             },
+            isEditAssistant:    null,
             
 
 
@@ -1295,7 +1298,7 @@ export default {
             var urlGetRecords = '/records/'+ this.event +'/lists';
             axios.get(urlGetRecords).then(response =>{
                 this.eventRecords = response.data
-                //console.log('este es al valo mijo: '+this.assReg);
+                console.log('this is the response value: '+this.assReg);
             }).catch(error => {
                 this.errors = error.response.data
             });
@@ -1889,7 +1892,7 @@ export default {
                         if(this.planSel.host == null ){
                             //toastr.success('tudo vem!');
                             this.createRecord();
-                        }else if(this.hotelSel != '' && this.checkInDate != '' &&  this.checkOutDate != ''){
+                        }else if(this.hotelSel != '' && this.checkInDate != '' && this.checkOutDate != ''){
                             this.createRecordWthH();
                             }else{
                             toastr.error('Este registro cuenta con plan de hospedaje, debe elegir la fecha de ingreso, fecha de salida y numero de habitacion!');
@@ -2078,9 +2081,10 @@ export default {
         },
         setUpdateAssistantModal : function(id) {
             //console.log(`the id ${id}`)
-            this.getAssitantData(id)
-            this.isIdAssSelected = id
-            $('#update-assistant-modal').modal('show')
+            console.log(this.getAssitantData(id));
+            this.isEditAssistant = typeof(this.assistantUp) === 'object' ? true : null;
+            // this.isIdAssSelected = id
+            // $('#update-assistant-modal').modal('show')     in this part going to modal updtae assistanttt
         },
         setUpdateAlimentsModal : function(id) {
             console.log(`the record id ${id}`)
@@ -2162,7 +2166,24 @@ export default {
                 this.errors = error.response.data
                 console.log(`ooops thats an error like this: ${error.resoonse.data}`)
             });
-        }
+        },
+        closeEditAssistant(){
+            this.showDatatable();
+            this.assistantUp = {
+                names:          '',
+                last_names:     '',
+                id_number:     '',
+                email:         '',
+                position:      '',
+                id_card:       '',
+                id_city:       '',
+                address:       '',
+                tel:           '',
+                cel:           '',
+                position:      '',
+                email:         '',
+            };
+        },
 
     }
 }

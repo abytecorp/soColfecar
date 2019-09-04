@@ -18,6 +18,10 @@
 </template>
 <script>
 export default {
-    props: ['per']
+    props: {
+        per: {
+            default: false
+        }
+    }
 }
 </script>

@@ -18,9 +18,9 @@
         <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.city_id }}</span>
         <label for="placeCity">Seleccione una ciudad</label>
         <br>
-        <div class="jumbotron">
-            <address-gen :data="place.address" @upAddress="setUpAddress" @upAddressDig="setUpAddressDig" @toReset="setReset"></address-gen>
-        </div>
+        <!-- <div class="jumbotron"> -->
+            <address-autocomplete  @upAddress="setUpAddress"></address-autocomplete>
+        <!-- </div> -->
         <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.address }}</span>
         <br>
         <button type="submit"  class="btn waves-effect waves-light btn-success" >Guardar</button>
@@ -30,12 +30,12 @@
 </template>
 <script>
 import FloatingLabel from 'vue-simple-floating-labels'
-import addressGen from './Address-gen'
+import addressAutocomplete from './Address-autocomplete'
 
 export default {
     components:    {
         FloatingLabel,
-        addressGen,
+        addressAutocomplete,
     },
     data () {
         return {
@@ -66,15 +66,7 @@ export default {
         },
         setUpAddress : function(val) {
         //(Addres-gen)this function used to add the nomenclature an the letters, whit spaces to build the string
-        this.place.address = this.place.address + ' ' + val + ' '
-        },
-        setUpAddressDig : function(val) {
-        //(Address-gen)this function add the string whitout a initial space, this used in the numbers.
-        this.place.address = this.place.address + val
-        },
-        setReset : function() {
-        //(Address-gen) this function reset or erase the charset or adress that gives the object
-        this.place.address = ''
+        this.place.address = val
         },
         storePlace : function() {
             this.place.city_id = this.place.city_id ? this.place.city_id.id : null

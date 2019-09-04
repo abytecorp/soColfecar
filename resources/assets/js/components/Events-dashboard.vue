@@ -47,6 +47,10 @@
         <changes :item_id="10" ></changes>
         <new-event-modal v-if="isNewEvent" @successEnd="endNewEventModal"></new-event-modal>
         <conf-events-module></conf-events-module>
+        <Plans-edit v-if="isConfPlans" :eventId="isConfPlans" ></Plans-edit>
+        <modal-link-coupon v-if="isModalLinkCoupon" :invitation_link="isModalLinkCoupon"></modal-link-coupon>
+        <modal-adding-hotel-to-event v-if="isNewHotelToEvent" :event_id="isNewHotelToEvent"></modal-adding-hotel-to-event>
+
     </div>
 </template>
 <script>
@@ -60,7 +64,13 @@ import eventCant from './event-cant'
 import NewEventModal from './New_event_modal'
 import datatableEventByState from './Datatable-event-by-state'
 import confEventsModule from './Conf-events-module'
-import proxEvents from './Prox-events.vue'
+import proxEvents from './New-event/Prox-events.vue'
+import ModalLinkCoupon from './New-event/Modal-link-coupon'
+import ModalAddingHotelToEvent from './New-event/Modal-adding-hotel-to-event';
+
+
+import PlansEdit from './New-event/Plans-edit'
+ 
 
 Vue.use(activeInTime)
 
@@ -71,7 +81,10 @@ export default {
         eventCant,
         datatableEventByState,
         confEventsModule,
-        proxEvents
+        proxEvents,
+        PlansEdit,
+        ModalLinkCoupon,
+        ModalAddingHotelToEvent
     },
     props: ['events'],
     data() {
@@ -83,6 +96,9 @@ export default {
             reloadCmpState:     true,
             eventStatSel:       null,
             eventsByStat:       [],
+            isConfPlans:        false,
+            isModalLinkCoupon:  null,
+            isNewHotelToEvent:  null,
         }
     },
     created: function() {
@@ -93,6 +109,21 @@ export default {
         })
         this.$bus.$on('get-event-types', () => {
             this.getEventTypes()
+        })
+        this.$bus.$on('conf-plans', (eventId) => {
+            this.confPlans(eventId)
+        })
+        this.$bus.$on('set-modal-link-coupon', (invitation_link) => {
+            this.isModalLinkCoupon = invitation_link;
+        })
+        this.$bus.$on('close-modal-link-coupon', (invitation_link) => {
+            this.isModalLinkCoupon = null;
+        })
+        this.$bus.$on('add-hotel', (val) => {
+            this.addHotel(val);
+        })
+        this.$bus.$on('close-add-hotel', () => {
+            this.closeAddHotel();
         })
     },
     methods:    {
@@ -160,6 +191,15 @@ export default {
         },
         showConfAffModul : function () {
             $('#confEventsModulModal').modal('show')
+        },
+        confPlans : function(eventId){
+            this.isConfPlans = !this.isConfPlans ? eventId : false
+        },
+        addHotel(val){
+            this.isNewHotelToEvent = val;
+        },
+        closeAddHotel(){
+            this.isNewHotelToEvent = null;
         }
     },
 }

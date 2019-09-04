@@ -15,6 +15,39 @@ Route::get('congreso', 'MiniappController@login');
 Route::post('congreso-menu', 'MiniappController@validateAssistant')->name('login.miniapp');
 Route::post('congreso-plano', 'MiniappController@map')->name('plano.miniapp');
 Route::get('congreso-plano-full', 'MiniappController@mapFull')->name('planofull.miniapp');
+Route::get('/api/get-companies-external','ExternalInscriptionController@getCompaniesExternal');
+Route::get('/api/{company}/get-company-by-id','ExternalInscriptionController@getCompanyById');
+Route::get('/api/address/get-nomenclatures','AddressController@getNomenclatures');
+Route::post('/api/company','ExternalInscriptionController@companyStore');
+//get cities
+Route::get('/api/get-cities/','DivulgationController@getCities');
+//get assistants by company external
+Route::get('/api/{company}/get-assistants-by-company-external','ExternalInscriptionController@getAssistantByCompany');
+//post new assistant
+Route::post('/api/assistants-external','ExternalInscriptionController@assistantExternal');
+//get assistant by id
+Route::get('/api/{assistant_id}/get-asistant-by-id-external','ExternalInscriptionController@getAssistantById');
+//get plans from externaql from
+Route::get('/api/{invitation_type}/{event_id}/get-plans-external','ExternalInscriptionController@getPlansExternal');
+//get hotels external
+Route::get('/api/{event}/get-hotels-external','ExternalInscriptionController@getHotelsExternal');
+//get single rooms external
+Route::get('/api/{hotel_to_event_id}/get-single-rooms-external','ExternalInscriptionController@getSingleRoomsExternal');
+Route::get('/api/{hotel_to_event_id}/get-double-rooms-external','ExternalInscriptionController@getDoubleRoomsExternal');
+//edi¡t assistant data external
+Route::put('/api/{assistant_id}/assistants-up-external','ExternalInscriptionController@updateAssistantExternal');
+//get id types
+Route::get('/api/get-id-types-external','ExternalInscriptionController@getIdTypesExternal');
+//external record
+Route::post('/api/store-record-external','ExternalInscriptionController@storeRecordExternal');
+// update room double
+Route::put('/api/{room_id}/set-double-room','ExternalInscriptionController@updateDoubleRoom');
+// update room single
+Route::put('/api/{room_id}/set-single-room','ExternalInscriptionController@updateSingleRoom');
+// get assistant suscripted
+Route::get('/api/{assistant}/{event}/get-suscripted-assistant','ExternalInscriptionController@getSuscriptedAssistant');
+// set new bill assistants
+Route::post('/api/store-new-bill','EventsController@storeNewBill');
 
 
 Auth::routes();
@@ -33,14 +66,16 @@ Route::patch('assistantEvents/{assistant}', 'AssistantEventController@update')->
 
 
 //external inscription
-Route::get('/external-inscription/{event}/{plan}', 'ExternalInscriptionController@create')->name('external-inscription.create');
+Route::get('/inscripcion-externa/{event}/asistentes', 'ExternalInscriptionController@create');
+Route::get('/inscripcion-externa/{event}/invitados-especiales', 'ExternalInscriptionController@createSpecialGuests');
+Route::get('/inscripcion-externa/{event}/staff', 'ExternalInscriptionController@createSponsors');
 
                 //assistants resources controller and routes
                 Route::resource('assistants', 'AssistantController', ['except' => 'show','create']);
 Route::middleware(['auth'])->group(function(){
 
                //plans resources controller and routes
-        Route::resource('plans', 'PlanController', ['except' => 'show','create','edit']);
+        Route::resource('plans', 'PlanController', ['except' => 'show','edit']);
                 //companies resources controller and routes
         Route::resource('companies', 'CompanyController', ['except' => 'show','create','edit']);
 
@@ -84,7 +119,7 @@ Route::middleware(['auth'])->group(function(){
 
 //API
         //get assets to normally address
-        Route::get('/api/address/get-nomenclatures','AddressController@getNomenclatures');
+
         Route::get('/api/address/get-digits','AddressController@getDigits');
         Route::get('/api/address/get-add-letters','AddressController@getAddLetters');
 
@@ -134,8 +169,6 @@ Route::middleware(['auth'])->group(function(){
         //get events
         Route::get('/api/get-events/{event}','DivulgationController@getEvents');
 
-        //get cities
-        Route::get('/api/get-cities/','DivulgationController@getCities');
 
         //get hotels
         Route::get('/api/get-hotels/','DivulgationController@getHotels');
@@ -265,9 +298,30 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/api/get-changes-by-user/{user}','ChangesController@getChangesByUser');
         //get company types to API
         Route::get('/api/get-company-types','CompanyTypeController@getCompanyTypes');
-
+        //get economic activities
+        Route::get('/api/get-economic-activities','AffiliationsController@getEconomicActivities');
+        //get regime types
+        Route::get('/api/get-regime-types','AffiliationsController@getRegimeTypes');
+        //get society types
+        Route::get('/api/get-society-types','AffiliationsController@getSocietyTypes');
+        Route::get('/api/get-plans-event/{event}','DivulgationController@getPlansByEvent');
+        //get hotels by evcent
+        Route::get('/api/{event}/get-hotels-by-event','EventsController@getHotelsByEvent');
+        //store hotel to event
+        Route::post('/api/store-hotel-to-event','EventsController@storeHotelToEvent');
         //create place
         Route::post('/api/places/store','EventsController@placesStore');
+        //create singles rooms
+        Route::get('/api/{id}/single-room','EventsController@storeSingleRoom');
+        //create double rooms
+        Route::get('/api/{id}/double-room','EventsController@storeDoubleRoom');
+        // get-rooms-assigned
+        Route::get('/api/{hotel}/get-rooms-assigned','EventsController@getRoomsAssigned');
+        // delete_rooms 
+        Route::get('/api/{hotels_to_event_id}/delete_rooms','EventsController@deleteRooms');
+        // delete hotel assign
+        Route::get('/api/{hotels_to_event_id}/delete_hotel-assign','EventsController@deleteHotelAssign');
+
 
     //Chapters
     Route::post('chapter/store', 'ChapterController@store')->name('chapter.store');

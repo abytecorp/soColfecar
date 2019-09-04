@@ -150,6 +150,7 @@ return [
 
         Caffeinated\Shinobi\ShinobiServiceProvider::class,
         Kamaln7\Toastr\ToastrServiceProvider::class,
+        Gocanto\AddressValidation\ValidatorServiceProvider::class,
 
         /*
          * Package Service Providers...

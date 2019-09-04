@@ -19,6 +19,10 @@ use soColfecar\Item;
 use soColfecar\Icon;
 use soColfecar\Assistant;
 use soColfecar\Event;
+use soColfecar\Economic_activity;
+use soColfecar\Regime_type;
+use soColfecar\Society_type;
+
 use Auth;
 
 class AffiliationsController extends Controller
@@ -354,5 +358,23 @@ class AffiliationsController extends Controller
         $events = Event::where('id_event_type',$request)
             ->get();
         return $events;
+    }
+    public function getEconomicActivities()
+    {
+        $economic_activities = Economic_activity::where('status_id','=',1)
+            ->get();
+        return $economic_activities;
+    }
+    public function getRegimeTypes()
+    {
+        $regime_types = Regime_type::where('state_id','=',1)
+        ->get();
+        return $regime_types;
+    }
+    public function getSocietyTypes()
+    {
+        $society_types = Society_type::where('status_id','=',1)
+        ->get();
+        return $society_types;
     }
 }

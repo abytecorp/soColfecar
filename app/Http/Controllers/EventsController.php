@@ -9,11 +9,17 @@ use soColfecar\Http\Requests\UpdateEventRequest;
 use soColfecar\Http\Requests\CreatePlaceRequest;
 use soColfecar\Http\Requests\UpdateEventTypeRequest;
 use soColfecar\Http\Requests\CreateEventTypeRequest;
+use soColfecar\Http\Requests\CreateHotelToEventRequest;
 use soColfecar\User;
 use soColfecar\Change;
 use soColfecar\Event;
+use soColfecar\Hotel;
 use soColfecar\Event_type;
 use soColfecar\Place;
+use soColfecar\Hotel_to_event;
+use soColfecar\Single_room;
+use soColfecar\Double_room;
+use soColfecar\Bill;
 use Auth;
 use DB;
 
@@ -54,7 +60,7 @@ class EventsController extends Controller
         $path = public_path().'/storage/banner/'.$fileName;
         file_put_contents($path, $decoded);
 
-        Event::create([
+        $event = Event::create([
             'event' => strtoupper($request->event),
             'id_event_type' => $request->id_event_type,
             'date_init' => $request->date_init,
@@ -67,7 +73,7 @@ class EventsController extends Controller
             'id_item' => 10,
             'id_user' => Auth::user()->id,
         ]);
-            return;
+            return $event;
 
     }
     /**
@@ -221,8 +227,80 @@ class EventsController extends Controller
             // ->join('users', 'users.id','=','changes.id_user')
             ->where('events.date_init','>=', $currentDate)
             ->where('events.id_status',1)
-            // ->orderBy('changes.created_at','DESC')
+            ->orderBy('events.created_at','DESC')
             ->get();
         return $events;
+    }
+    public function getHotelsByEvent($event)
+    {
+        $hotelsByEvent = Hotel_to_event::select('hotel_to_events.id AS hotels_to_event_id', 'hotel_to_events.event_id', 'hotel_to_events.hotel_id', 'hotel_to_events.single_rooms', 
+            'hotel_to_events.double_rooms', 'hotel_to_events.status_id', 'hotel_to_events.created_at', 'hotel_to_events.updated_at','hotels.hotel_name', 'hotels.id AS hotel_id')
+            ->join('hotels','hotel_to_events.hotel_id','hotels.id')
+            ->where('hotel_to_events.event_id',$event)
+            ->where('hotel_to_events.status_id',1)
+            ->get();
+        return $hotelsByEvent;
+    }
+    public function storeHotelToEvent(CreateHotelToEventRequest $request) {
+        $hotel = Hotel::where('id',$request->hotel_id)->first();
+        $event = Event::where('id',$request->event_id)->first();
+        $Hotel_to_event = Hotel_to_event::create($request->all());
+        Change::create([
+            'description' => 'Asigno el hotel ['.$hotel->hotel_name.'] al evento ['.$event->event.'] correctamente.',
+            'id_item' => 10,
+            'id_user' => Auth::user()->id,
+        ]);
+        return $Hotel_to_event;
+    }
+    public function storeNewBill(Request $request) {
+        $bill = Bill::create([
+            'id_record' => $request->record_id,
+            'price' => $request->price,
+            'us_cr' => 28
+        ]);
+        return $bill;
+    }
+    public function storeSingleRoom($id)
+    {
+        $single_room = Single_room::create([
+            'hotel_to_event_id' => $id
+        ]);
+        return $single_room;
+    }
+    public function storeDoubleRoom($id)
+    {
+        $double_room = Double_room::create([
+            'hotel_to_event_id' => $id
+        ]);
+        return $double_room;
+    }
+    public function getRoomsAssigned($hotels_to_event_id)
+    {
+        $single_rooms = Single_room::where('hotel_to_event_id',$hotels_to_event_id)
+            ->where('record_id','!=',null)
+            ->get();
+        $double_rooms = Double_room::where('hotel_to_event_id',$hotels_to_event_id)
+            ->where('record_id','!=',null)
+            ->orWhere('companion_id','!=',null)
+            ->get();
+        //return;
+        if($single_rooms){
+            return $single_rooms;
+        }else if($double_rooms){
+            return $double_rooms;
+        }else{
+            return $single_room;
+        }
+    }
+    public function deleteRooms($hotels_to_event_id)
+    {
+        $single_rooms=Single_room::where('hotel_to_event_id',$hotels_to_event_id)->delete();
+        $double_rooms=Double_room::where('hotel_to_event_id',$hotels_to_event_id)->delete();
+        return;
+    }
+    public function deleteHotelAssign($hotels_to_event_id)
+    {
+        $hotel_to_event = Hotel_to_event::where('id',$hotels_to_event_id)->delete();
+        return;
     }
 }

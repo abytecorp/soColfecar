@@ -26,9 +26,10 @@ class CreatePlanRequest extends FormRequest
         return [
             'plan' => ['required', 'max:120'],
             'id_event' => ['required'],
-            'id_company_state' => ['required'],
-            'pl_desc' => ['required'],
-            'price' => ['required'],
+            'invitation_type' => ['required'],
+            //'id_company_state' => ['required'],
+            // 'pl_desc' => ['required'],
+            // 'price' => ['required'],
 
         ];
     }
@@ -37,10 +38,11 @@ class CreatePlanRequest extends FormRequest
         return[
             'plan.required' => 'Porfavor ingrese el nombre del plan.',
             'plan.max' => 'El nombre del plan no debe superar los 120 caracteres.',
-            'pl_desc.required' => 'Debe ingresar la descripcion del plan',
+            //'pl_desc.required' => 'Debe ingresar la descripcion del plan',
             'id_event.required' => 'Debe seleccionar un evento',
-            'id_company_state.required' => 'Debe asiganr un tipo de beneficio',
-            'price.required' => ['Debe asignar un valor al plan'],
+            'invitation_type.required' => 'Es necesario seleccionar el tipo de invitacion.'
+            // 'id_company_state.required' => 'Debe asiganr un tipo de beneficio',
+            // 'price.required' => ['Debe asignar un valor al plan'],
         ];
     }
 }

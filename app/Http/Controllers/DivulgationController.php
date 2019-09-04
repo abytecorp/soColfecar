@@ -126,7 +126,8 @@ class DivulgationController extends Controller
     {
         
         $plans = Plan::where('id_event',$event->id)
-            ->where('id_status',1)->get();
+            ->where('id_status','=',1)
+            ->get();
         //dd($plans);
         return $plans;
     }
@@ -150,7 +151,7 @@ class DivulgationController extends Controller
         $plans = Plan::select('plans.id','plans.plan','plans.pl_desc','plans.id_event','plans.price',
                             'plans.id_status','plans.id_company_state','plans.academic_agenda','plans.lunches','plans.refreshments',
                             'plans.dinner','plans.breakfast','plans.host','company_states.id AS id_cps', 'company_states.company_state')
-            ->where('id_event',$event)
+            ->where('id_event','=',$event)
             ->join('company_states','plans.id_company_state','company_states.id')
             ->get();
         return $plans;
@@ -462,5 +463,12 @@ class DivulgationController extends Controller
             ->join('status', 'assistants.id_status','=','status.id')
             ->first();
         return $assistant;
+    }
+    public function getPlansByEvent($event)
+    {
+        $event = Plan::where('id_event','=',$event)
+            ->where('id_status','=',1)
+            ->get();
+        return $event;
     }
 }

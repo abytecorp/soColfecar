@@ -107,8 +107,8 @@ class RecordController extends Controller
         $records = Record::select(DB::raw('CONCAT(assistants.names," ",assistants.last_names," ",companies.bs_name ) AS label'),
             'records.id AS id_r','records.id_assistant','records.id_event','records.id_plan',
             'records.id_record_state','records.enroll_name','records.enroll_email', 'records.id_partner', 'records.printed_at',
-            'assistants.names','assistants.last_names',
-           'companies.bs_name','companies.acronym', 'companies.nit',
+            'assistants.names','assistants.last_names', 'assistants.id_number',
+            'companies.bs_name','companies.acronym', 'companies.nit',
             'plans.plan', 'plans.price', 'plans.pl_desc', 'plans.id_event', 'record_states.record_state',
             'bills.price AS bill_price','bills.us_cr', 'bills.id AS id_bill'
             )

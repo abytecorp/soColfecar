@@ -27,7 +27,7 @@ class CreateAssistantFastRequest extends FormRequest
             'names' => ['required', 'max:120'],
             'last_names' => ['required', 'max:120'],
             'email' => ['required', 'email', 'unique:assistants'],
-            // 'id_city' => ['required'],
+            'id_city' => ['required'],
             'id_company' => ['required'],
         ];
     }
@@ -41,7 +41,7 @@ class CreateAssistantFastRequest extends FormRequest
             'email.required' => 'Porfavor ingrese el correo electronico',
             'email.email' => 'Ingrese un correo electronico valido',
             'email.unique' => 'Este correo ya pertenece a otro asistente',
-            // 'id_city.required' => 'Debe registrar la ciudad.',
+            'id_city.required' => 'Debe registrar la ciudad.',
             'id_company.required' => 'Debe seleccionar una empresa.',
         ];
     }
