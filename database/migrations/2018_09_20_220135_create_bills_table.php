@@ -23,6 +23,7 @@ class CreateBillsTable extends Migration
             $table->string('way_to_pay')->nullable();
             $table->integer('us_cr')->unsigned();
             $table->integer('us_up')->unsigned()->nullable();
+            $table->longText('obs')->nullable();
             $table->timestamps();
 
             $table->foreign('id_record')->references('id')->on('records');

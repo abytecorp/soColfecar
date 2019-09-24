@@ -140,6 +140,7 @@ export default {
             var url = '/api/assistants-external';
             axios.post(url, this.assistant).then(response => {
                 toastr.success(`Se ha creado el contacto ${this.assistant.names} ${this.assistant.last_names} con exito!`);
+                this.$emit('getAssistantsByCompany')
                 $('#newAssistantModal').modal('hide');
                 this.$emit('closeNewAssistant');
             }).catch(error => {

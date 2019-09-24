@@ -58,7 +58,7 @@ export default {
             type: 'success'
           },
           handler: row => {
-              this.$emit('updateAlimentsModal', row.record_id)  
+              this.$bus.$emit('set-enable-alim', row.record_id)
           },
           label: 'Alimentacion'
         },{
@@ -107,6 +107,16 @@ export default {
             //this.$message.success(`the id selected ${row.full_name}`)
           },
           label: 'Eliminar Registro'
+        },{
+          props: {
+            icon: 'el-icon-edit',
+            color: 'danger'
+          },
+          handler: row => {
+              this.$emit('billModal', row.record_id)
+            
+          },
+          label: 'Facturar'
         }]
       },
       selectedRow: []

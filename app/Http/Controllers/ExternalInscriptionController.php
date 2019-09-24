@@ -16,6 +16,7 @@ use soColfecar\Single_room;
 use soColfecar\Double_room;
 use soColfecar\Id_type;
 use soColfecar\Record;
+use soColfecar\Bill;
 use DB;
 
 class ExternalInscriptionController extends Controller
@@ -240,5 +241,14 @@ class ExternalInscriptionController extends Controller
             ->where('id_event','=',$event)
             ->first();
         return $record;
+    }
+    public function storeNewBill(Request $request){
+        $bill = Bill::create([
+            'id_record' => $request['record_id'],
+            'price' => $request['price'],
+            'obs' => $request['obs'],
+            'us_cr' => 28
+        ]);
+        return $bill;
     }
 }

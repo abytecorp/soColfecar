@@ -49,7 +49,11 @@
                         </div>
                     </div>
                 </div>
-<modal-new-external-assistant v-if="isNewAssistant" :company_id="company_id.company_id" @closeNewAssistant="closeNewAssistant"></modal-new-external-assistant>
+<modal-new-external-assistant v-if="isNewAssistant" 
+    :company_id="company_id.id" 
+    @closeNewAssistant="closeNewAssistant"
+    @getAssistantsByCompany="getAssistantsByCompany">
+</modal-new-external-assistant>
 <modal-edit-external-assistant v-if="isEditAssistant" :company_id="company_id.company_id" :assistant_id="isEditAssistant" @closeEditAssistant="closeEditAssistant"></modal-edit-external-assistant>
 <modal-suscription-assistant-ext 
     v-if="isNewSuscription" 
@@ -106,7 +110,7 @@ export default {
     // },
     methods : {
         getAssistantsByCompany() {
-            let url = `/api/${this.company_id.company_id}/get-assistants-by-company-external`;
+            let url = `/api/${this.company_id.id}/get-assistants-by-company-external`;
             axios.get(url).then(response =>{
                 this.assistants = response.data;
                 this.valSus();

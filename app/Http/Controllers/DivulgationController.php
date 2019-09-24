@@ -26,6 +26,7 @@ use soColfecar\Id_type;
 use soColfecar\Change;
 use soColfecar\Reg_observation;
 use soColfecar\Billing_debit;
+use soColfecar\Billing_cost;
 use Auth;
 use DB;
 
@@ -229,19 +230,17 @@ class DivulgationController extends Controller
     }
     public function getRefStatusRecord($user,$ref_mode)
     {
-
-        $recordS = Record::where('id_assistant',$user)->first();
-//dd($recordS);
-      
+        $recordS = Record::where('id_assistant',$user)->first(); 
         return $recordS;
     }
-    public function getRegByAssId($id_assistant)
+    public function getRegByAssId($id_assistant,$event)
     {
         $record = Record::select('records.id AS record_id','records.id_assistant','records.id_plan','records.id_record_state','records.created_at',
         'records.updated_at','records.id_record_state','records.enroll_name','records.enroll_email','records.printed_at','records.printed_by',
         'records.id_status_gafete','records.entry_moment','records.Refrigeriodia1','records.Refrigeriodia2','records.Refrigeriodia3','records.Refrigeriodia4',
         'records.Almuerzodia1','records.Almuerzodia2','records.Almuerzodia3','records.Cenadia1','records.Cenadia2','records.Cenadia3','assistants.names','assistants.last_names')
                 ->where('id_assistant',$id_assistant)
+                ->where('id_event',$event)
                 ->join('assistants','records.id_assistant','assistants.id') 
                 ->get();
         return $record;
@@ -251,10 +250,12 @@ class DivulgationController extends Controller
         $record = Record::select('records.id AS record_id','records.id_assistant','records.id_plan','records.id_record_state','records.created_at',
         'records.updated_at','records.id_record_state','records.enroll_name','records.enroll_email','records.printed_at','records.printed_by',
         'records.id_status_gafete','records.entry_moment','records.Refrigeriodia1','records.Refrigeriodia2','records.Refrigeriodia3','records.Refrigeriodia4',
-        'records.Almuerzodia1','records.Almuerzodia2','records.Almuerzodia3','records.Cenadia1','records.Cenadia2','records.Cenadia3','assistants.names','assistants.last_names')
+        'records.Almuerzodia1','records.Almuerzodia2','records.Almuerzodia3','records.Cenadia1','records.Cenadia2','records.Cenadia3','assistants.names',
+        'assistants.last_names','plans.price AS plan_price')
                 ->where('records.id',$id_record)
-                ->join('assistants','records.id_assistant','assistants.id') 
-                ->get();
+                ->join('assistants','records.id_assistant','assistants.id')
+                ->join('plans','records.id_plan','plans.id')
+                ->first();
         return $record;
     }
     public function setRegRef($id_ref,$ref_mode,$record)
@@ -414,10 +415,10 @@ class DivulgationController extends Controller
         return $reg_observations;
     }
     public function getBillByRec($record){
-        $bill = Bill::select('bills.price','bills.us_cr', 'bills.created_at', 'users.name','users.last_name')
+        $bill = Bill::select('bills.price','bills.us_cr', 'bills.created_at','bills.id AS bill_id', 'users.name','users.last_name')
         ->join('users','bills.us_cr','users.id')
         ->where('id_record',$record)
-        ->get();
+        ->first();
         return $bill;
     }
     public function getDebitByRec($bill){
@@ -470,5 +471,26 @@ class DivulgationController extends Controller
             ->where('id_status','=',1)
             ->get();
         return $event;
+    }
+    public function storeNewBill(Request $request){
+        $bill = Bill::create([
+            'id_record' => $request['record_id'],
+            'price' => $request['price'],
+            'obs' => $request['obs'],
+            'us_cr' => Auth::user()->id
+        ]);
+        return $bill;
+    }
+    public function getCosts($bill){
+        $costs = Billing_cost::where('id_bill', '=', $bill)
+            ->get();
+        return $costs;
+    }
+    public function getLunchStatus($record){
+        $lunchs_status = Record::select('Refrigeriodia1', 'Refrigeriodia2', 'Refrigeriodia3', 'Refrigeriodia4', 'Almuerzodia1', 'Almuerzodia2',
+        'Almuerzodia3', 'Cenadia1', 'Cenadia2', 'Cenadia3')
+            ->where('id','=',$record)
+            ->first();
+        return $lunchs_status;
     }
 }

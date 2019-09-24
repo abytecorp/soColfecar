@@ -7,13 +7,14 @@
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
+        "lint": "standard",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "heroku-postbuild": "npm run production"
     },
     "devDependencies": {
         "@babel/cli": "^7.2.0",
         "@babel/preset-env": "^7.2.0",
-        "axios": "^0.18",
+        "axios": "^0.18.1",
         "babel-helper-vue-jsx-merge-props": "^2.0.3",
         "babel-plugin-jsx-v-model": "^2.0.3",
         "babel-plugin-lodash": "^3.3.4",
@@ -26,10 +27,11 @@
         "cross-env": "^5.2.0",
         "jquery": "^3.4.1",
         "laravel-mix": "^4.0.15",
-        "lodash": "^4.17.11",
+        "lodash": "^4.17.15",
         "popper.js": "^1.14.4",
         "resolve-url-loader": "^2.3.1",
         "sass-loader": "^7.1.0",
+        "standard": "^14.1.0",
         "vue": "^2.5.7",
         "vue-template-compiler": "^2.5.21"
     },
@@ -74,5 +76,16 @@
         "vuejs-datatable": "^1.6.0",
         "vuejs-progress-bar": "^1.0.9",
         "waves": "^0.1.1"
+    },
+    "standard": {
+        "ignore": [
+            "/node_modules/**",
+            "/vendor/**"
+        ]
+    },
+    "eslintConfig": {
+        "extends": [
+            "./node_mopdules/standard/eslintrc.json"
+        ]
     }
 }

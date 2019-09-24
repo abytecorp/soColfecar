@@ -139,7 +139,7 @@
                 <div class="card-body">
                     <h5 class="card-title">TAREAS COMUNES</h5>
                     <div class="row">
-                        <a href="#" v-on:click.prevent="newInscription" class="btn btn-block btn-outline-info">NUEVA INSCRIPCION</a>
+                        <a href="#" v-on:click.prevent="setNewInscriptionModal" class="btn btn-block btn-outline-info">NUEVA INSCRIPCION</a>
                         <a href="#" v-on:click.prevent="showDatatable"  class="btn btn-block btn-outline-info">VALIDAR INSCRIPCIONES</a>
                         
                     </div>
@@ -147,11 +147,19 @@
             </div>
         </div>
     </div>
-     <div v-if="isDatatable"><data-table :data="assistantsByEvent" @updateAlimentsModal="setUpdateAlimentsModal" @updateAssistantModal="setUpdateAssistantModal" @updateDataTable="getAssistantsByEvent"></data-table></div>   
+     <div v-if="isDatatable">
+        <data-table 
+            :data="assistantsByEvent" 
+            @updateAlimentsModal="setUpdateAlimentsModal" 
+            @updateAssistantModal="setUpdateAssistantModal" 
+            @updateDataTable="getAssistantsByEvent"
+            @billModal="billModalSet">
+        </data-table>
+    </div>   
      <hr>
      <div class="card-group">
         <div class="col-lg-8 col-md-12">
-        <div class="card">
+        <!-- <div class="card">
             <div class="card-body">
                 <h5 class="card-title">PLANES</h5>
                 <div class="row">
@@ -168,11 +176,11 @@
                     </div>
                 </div>
             </div>
-        </div>
-        </div>
+        </div>-->
+        </div> 
 
         <div class="col-lg-4 col-md-12">
-            <div class="card">
+            <!-- <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">HOTELES</h5>
                     <div class="row">
@@ -197,8 +205,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div>-->
+        </div> 
     </div>
 
 
@@ -277,7 +285,12 @@
                     <!-- v select -->
                         <!-- reg and print gafette -->
                         <div v-if="assSel != ''">
+                            <pay-status-notification 
+                                :bill_id="assSel.id_bill"
+                                :plan_value="assSel.bill_price">
+                            </pay-status-notification>
                         <div class="row" id="infoAss">
+
                                 <div class="card">
                                     <div class="card-body">
                                         <!-- Nav tabs -->
@@ -612,7 +625,7 @@
                             <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.pl_desc }}</span>
                         </div>
                         <div>
-                            <input type="hidden" name="id_event" v-bind="eventS">
+                           
                         </div>
                         <label for="id_company_state">Seleccione el tipo de beneficio</label>
                         <div class="form-group"> 
@@ -704,7 +717,7 @@
                             <span v-for="error in errors" class="text-danger" :key="error.error">{{ error.pl_desc }}</span>
                         </div>
                         <div>
-                            <input type="hidden" name="id_event" v-bind="eventS">
+                            
                         </div>
                         <label for="id_company_state">Seleccione el tipo de beneficio</label>
                         <div class="form-group"> 
@@ -1045,45 +1058,29 @@
         <!-- /.modal-dialog -->
     </div>
 
-
-    <div id="update-alimnets-modal" class="modal fade bs-example-modal-lg"  role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myLargeModalLabel">Active o desactive el alimento dando clic sobre el mismo</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-
-                                    <div class="col-lg-12 col-xlg-12 m-b-30">
-                                        <button v-bind:class="buttonLaunchedClases.Refrigeriodia1" type="button" v-on:click="changeLunchStatus('Refrigeriodia1')"><span class="btn-label"><i class="fa fa-coffee"></i></span> Refrigerio dia 1</button>
-                                        <button v-bind:class="buttonLaunchedClases.Refrigeriodia2" type="button" v-on:click="changeLunchStatus('Refrigeriodia2')"><span class="btn-label"><i class="fa fa-coffee"></i></span> Refrigerio dia 2</button>
-                                        <button v-bind:class="buttonLaunchedClases.Refrigeriodia3" type="button" v-on:click="changeLunchStatus('Refrigeriodia3')"><span class="btn-label"><i class="fa fa-coffee"></i></span> Refrigerio dia 3</button>
-                                        <button v-bind:class="buttonLaunchedClases.Refrigeriodia4" type="button" v-on:click="changeLunchStatus('Refrigeriodia4')"><span class="btn-label"><i class="fa fa-coffee"></i></span> Refrigerio dia 4</button>
-                                        <hr>
-                                        <button v-bind:class="buttonLaunchedClases.Almuerzodia1" type="button" v-on:click="changeLunchStatus('Almuerzodia1')"><span class="btn-label"><i class="fa fa-cutlery"></i></span> Almuerzo dia 1</button>
-                                        <button v-bind:class="buttonLaunchedClases.Almuerzodia2" type="button" v-on:click="changeLunchStatus('Almuerzodia2')"><span class="btn-label"><i class="fa fa-cutlery"></i></span> Almuerzo dia 2</button>
-                                        <button v-bind:class="buttonLaunchedClases.Almuerzodia3" type="button" v-on:click="changeLunchStatus('Almuerzodia3')"><span class="btn-label"><i class="fa fa-cutlery"></i></span> Almuerzo dia 3</button>
-                                        <hr>
-                                        <button v-bind:class="buttonLaunchedClases.Cenadia1" type="button" v-on:click="changeLunchStatus('Cenadia1')"><span class="btn-label"><i class="fa fa-cutlery"></i></span> Cena dia 1</button>
-                                        <button v-bind:class="buttonLaunchedClases.Cenadia2" type="button" v-on:click="changeLunchStatus('Cenadia2')"><span class="btn-label"><i class="fa fa-cutlery"></i></span> Cena dia 2</button>
-                                        <button v-bind:class="buttonLaunchedClases.Cenadia3" type="button" v-on:click="changeLunchStatus('Cenadia3')"><span class="btn-label"><i class="fa fa-cutlery"></i></span> Cena dia 3</button>
-                                        <hr>
-                                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    
-                </div>
-                
-            </div>
-            <!-- /.modal-content -->
-            </div>
-        <!-- /.modal-dialog -->
-    </div>
-
     <hr>
-<modal-edit-external-assistant v-if="assistantUp.id" :company_id="assistantUp.id_company" :assistant_id="assistantUp.id" @closeEditAssistant="closeEditAssistant" ></modal-edit-external-assistant>
+<modal-edit-external-assistant 
+    v-if="assistantUp.id" 
+    :company_id="assistantUp.id_company" 
+    :assistant_id="assistantUp.id" 
+    @closeEditAssistant="closeEditAssistant" >
+</modal-edit-external-assistant>
+
+<bill-modal
+    v-if="billRecordId"
+    :record_id="billRecordId"
+    @closeBillModal="closeBillModal"
+    @getAsPr="getRecords">
+</bill-modal>
+
+<enable-alim v-if="isEnableAlim"
+    :record_id="record_id_s"
+    @closeEnableAlimModal="closeEnableAlimModal">
+</enable-alim>
+
+<modal-internal-inscription v-if="isNewInscription"
+    >
+</modal-internal-inscription>
 
 
 </div>           
@@ -1103,6 +1100,10 @@ Vue.component( 'vue-qrcode-reader', VueQrcodeReader)
 
 import dataTable from './Data-table';
 import modalEditExternalAssistant from './External-inscription/Modal-edit-external-assistant';
+import billModal from './Bill/Modal-bill'; 
+import payStatusNotification from './Bill/Pay-status-notification'
+import enableAlim from './Event-panel/Enable-alim'
+import modalInternalInscription from './Internal-inscription/Modal-internal-inscription'
 //import updateAssistantmodal from './Updateassistant-modal';
 //Vue.component('update-assistantmodal', updateAssistantmodal)
 
@@ -1123,7 +1124,11 @@ export default {
     props: ['event'],
     components: {
         dataTable,
-        modalEditExternalAssistant
+        modalEditExternalAssistant,
+        billModal,
+        payStatusNotification,
+        enableAlim,
+        modalInternalInscription
     },
     data () {
         return {
@@ -1229,38 +1234,29 @@ export default {
                 position:      '',
                 email:         '',
             },
-            rSelToLunch:        [],
-            buttonLaunchedClases:    {
-                Refrigeriodia1: '',
-                Refrigeriodia2: '',
-                Refrigeriodia3: '',
-                Refrigeriodia4: '',
-                Almuerzodia1:   '',
-                Almuerzodia2:   '',
-                Almuerzodia3:   '',
-                Cenadia1:       '',
-                Cenadia2:       '',
-                Cenadia3:       '',
-            },
             isEditAssistant:    null,
-            
-
-
+            billRecordId:       null,
+            isEnableAlim:       null,
+            record_id_s:        null,
+            isNewInscription:   null,
         }
     },
     created: function() {
-        this.getPlans()
+        //this.getPlans()
         this.getCities()
         this.getRecords()
         this.getDisponibleNights()
         this.getAssistantsByEvent()
         this.getEvents()
-        this.getHotels()
+        //this.getHotels()
         this.getAsPr()
         this.getCompanies()
         this.getRoomTypes()
         this.getAssRegistered()
         this.getTotalRef()
+        this.$bus.$on('set-enable-alim', (val) => {
+            this.setEnableAlim(val)
+        })
     },
     methods: {
         async onDetect (promise) {
@@ -1359,14 +1355,14 @@ export default {
             this.getAsPr();
             $('#new-entry-modal').modal('show');
         },
-        getHotels : function() {
-            var url = '/api/get-hotels';
-            axios.get(url).then(response =>{
-                this.hotels = response.data
-            }).catch(error => {
-                this.errors = error.response.data
-            });
-        },
+        // getHotels : function() {
+        //     var url = '/api/get-hotels';
+        //     axios.get(url).then(response =>{
+        //         this.hotels = response.data
+        //     }).catch(error => {
+        //         this.errors = error.response.data
+        //     });
+        // },
         getBillCostByReg : function(regId) {
             var url = '/api/'+ regId +'/get-bill-costs-by-id'
         },
@@ -1403,6 +1399,7 @@ export default {
             axios.put(urlUpdatePrint, this.assSel).then(response =>{
                 //this.assSel = response.data
                 this.errors = []
+                this.getAsPr()
                 window.open('/print-gafete/'+id_rec , '_blank');
             }).catch(error => {
                 this.errors = error.response.data
@@ -1483,14 +1480,14 @@ export default {
                      
                 
         },
-        getPlans : function() {
-            this.eventS = event
-            var urlGetPlans = '/api/'+this.event+'/get-plans';
-            axios.get(urlGetPlans).then(response =>{
-                this.plans = response.data
-                this.priceNegotiate = this.planSel.price
-            });
-        },
+        // getPlans : function() {
+        //     this.eventS = event
+        //     var urlGetPlans = '/api/'+this.event+'/get-plans';
+        //     axios.get(urlGetPlans).then(response =>{
+        //         this.plans = response.data
+        //         this.priceNegotiate = this.planSel.price
+        //     });
+        // },
         getRoomTypes : function() {
             var url = '/api/get-room-types';
             axios.get(url).then(response =>{
@@ -1535,7 +1532,7 @@ export default {
             axios.post(url, {
                 plan:               this.newPlan,
                 pl_desc:            this.newDescription,
-                id_event:           this.eventSelects.id,
+                id_event:           this.event,
                 price:              this.newPrice,
                 id_company_state:   this.newCompanyState.id,
                 academic_agenda:    this.new_academic_agenda,
@@ -1580,7 +1577,7 @@ export default {
             var url = '/plans/'+id;
             axios.put(url, this.fillPlan).then(response =>{
                 this.getPlans();
-                this.fillPlan = {'id':'','plan':'','pl_description':'','id_company_state':'','price':''};
+                this.fillPlan = {'id':'','plan':'','pl_description':'','id_company_state':'','price':'','event_id' : this.event};
                 this.errors = [];
                 $('#editPlanModal').modal('hide');
                 $('.modal-backdrop').remove();
@@ -1937,7 +1934,7 @@ export default {
                  }            
         },
         assistantRegistering : function() {
-            var url2 = '/api/'+ this.assIdToReg +'/get-reg-by-assistant/';
+            let url2 = '/api/'+ this.assIdToReg +'/get-reg-by-assistant/';
             axios.get(url2).then(response =>{
                 this.recordSelectedOne = response.data
                 //console.log(this.recordSelectedOne[0].names)
@@ -1967,12 +1964,11 @@ export default {
             });
         },
         assistantRefRegistering : function(val,refMode) {
-            console.log("este es el alimento "+this.refRecordStatus.id)
                  if (val[refMode] == 0 || this.refMode == 'AgendaAcademica'){
                     var url = '/api/'+this.refRecordStatus.id+'/'+this.refMode+'/'+this.refRecordStatus.id+'/reg-ref';
                         axios.get(url).then(response =>{
                             this.assIdToReF = null
-                            toastr.success(' se ha registrado este alimento correctamente correctamente ');
+                            toastr.success(' Se ha registrado este alimento correctamente! ');
                             this.assistantsByEvent = [];
                             this.getAssistantsByEvent();
                             this.getTotalRef();
@@ -2155,18 +2151,6 @@ export default {
                 this.errors = error.response.data
             });
         },
-        changeLunchStatus : function(button) {
-            //console.log(`the value of selected: ${this.rSelToLunch[0][button]}`)
-            let selection = this.rSelToLunch[0][button] == 0 ? 1 : 0
-            console.log(`the button selected! ${button} and the record id ${this.rSelToLunch[0].record_id}`)
-            let url = '/api/records-lunch-update/' + this.rSelToLunch[0].record_id + '/' + button + '/' + selection
-            axios.get(url).then(response => {
-                this.getRecordByAssistant(this.rSelToLunch[0].record_id)
-            }).catch(error => {
-                this.errors = error.response.data
-                console.log(`ooops thats an error like this: ${error.resoonse.data}`)
-            });
-        },
         closeEditAssistant(){
             this.showDatatable();
             this.assistantUp = {
@@ -2184,6 +2168,27 @@ export default {
                 email:         '',
             };
         },
+        billModalSet(val){
+            this.billRecordId === val ? this.billRecordId = null : this.billRecordId = val
+        },
+        closeBillModal : function(){
+            this.billRecordId = null
+        },
+        setEnableAlim : function(val) {
+            console.log('record id', val)
+            if(val === this.record_id_s){
+                this.record_id_s = null
+            }
+            this.record_id_s = val
+            this.isEnableAlim = !this.isEnableAlim
+        },
+        closeEnableAlimModal : function() {
+            this.record_id_s = null
+            this.isEnableAlim = !this.isEnableAlim
+        },
+        setNewInscriptionModal : function() {
+            this.isNewInscription = !this.isNewInscription
+        }
 
     }
 }

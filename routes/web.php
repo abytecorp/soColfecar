@@ -19,6 +19,7 @@ Route::get('/api/get-companies-external','ExternalInscriptionController@getCompa
 Route::get('/api/{company}/get-company-by-id','ExternalInscriptionController@getCompanyById');
 Route::get('/api/address/get-nomenclatures','AddressController@getNomenclatures');
 Route::post('/api/company','ExternalInscriptionController@companyStore');
+Route::post('/api/store-new-bill','ExternalInscriptionController@storeNewBill');
 //get cities
 Route::get('/api/get-cities/','DivulgationController@getCities');
 //get assistants by company external
@@ -46,8 +47,7 @@ Route::put('/api/{room_id}/set-double-room','ExternalInscriptionController@updat
 Route::put('/api/{room_id}/set-single-room','ExternalInscriptionController@updateSingleRoom');
 // get assistant suscripted
 Route::get('/api/{assistant}/{event}/get-suscripted-assistant','ExternalInscriptionController@getSuscriptedAssistant');
-// set new bill assistants
-Route::post('/api/store-new-bill','EventsController@storeNewBill');
+
 
 
 Auth::routes();
@@ -205,7 +205,7 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/api/{user}/{ref_mode}/get-ref-status-by-record','DivulgationController@getRefStatusRecord');
 
         //get assistant by id
-        Route::get('/api/{assistant}/get-reg-by-assistant','DivulgationController@getRegByAssId');
+        Route::get('/api/{assistant}/{event}/get-reg-by-assistant','DivulgationController@getRegByAssId');
 
         //get record by id
         Route::get('/api/{record}/get-reg-by-record','DivulgationController@getRegByRecId');
@@ -321,7 +321,12 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/api/{hotels_to_event_id}/delete_rooms','EventsController@deleteRooms');
         // delete hotel assign
         Route::get('/api/{hotels_to_event_id}/delete_hotel-assign','EventsController@deleteHotelAssign');
-
+        // external new billing
+        Route::post('api/store-new-bill-in','DivulgationController@storeNewBill');
+        // get costs
+        Route::get('/api/{bill}/get-costs', 'DivulgationController@getCosts');
+        ///api/${this.record_id}/get-lunches-status
+        Route::get('/api/{record}/get-lunch-status','DivulgationController@getLunchStatus');
 
     //Chapters
     Route::post('chapter/store', 'ChapterController@store')->name('chapter.store');

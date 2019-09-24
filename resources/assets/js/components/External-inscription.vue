@@ -51,7 +51,7 @@
                 <!-- Card -->
             </div>
     </tab-content>
-    <tab-content title="Facturacion"
+    <tab-content v-if="event.invitation_type != 'sponsors'" title="Facturacion"
         icon="fa fa-money"
         :before-change="valSecondStep">
             <div class="col-lg-12 col-md-12">
@@ -245,6 +245,9 @@ export default {
             errors:         []
             //currentValue: true
         }
+    },
+    created : function() {
+        this.getCompanies()
     },
     methods : {
         getCities() {

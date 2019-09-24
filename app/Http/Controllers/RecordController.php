@@ -162,7 +162,9 @@ class RecordController extends Controller
     }
     public function getPrinted($event)
     {
-        $printed = Record::where('id_status_gafete','!=', null)->get();
+        $printed = Record::where('id_status_gafete','!=', null)
+            ->where('id_event', '=', $event)
+            ->get();
         return $printed;
     }
     public function createRecord($assistant,$event,$plan,$academic_agenda,$room,$hotel,$check_in,$check_out,$price)
