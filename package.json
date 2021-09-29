@@ -42,7 +42,7 @@
         "datatables.net-buttons": "^1.5.3",
         "dns": "^0.2.2",
         "element-ui": "^2.4.7",
-        "i": "^0.3.6",
+        "i": "^0.3.7",
         "imagemin": "^6.0.0",
         "jquery-sparkline": "^2.4.0",
         "jsbarcode": "^3.11.0",
