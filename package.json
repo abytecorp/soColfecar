@@ -47,7 +47,7 @@
         "jquery-sparkline": "^2.4.0",
         "jsbarcode": "^3.11.0",
         "jspdf": "^1.5.3",
-        "moment": "^2.22.2",
+        "moment": "^2.29.2",
         "morris": "^0.1.4",
         "raphael": "^2.2.7",
         "sass": "^1.15.2",
